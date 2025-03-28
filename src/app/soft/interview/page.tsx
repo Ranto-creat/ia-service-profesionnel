@@ -29,7 +29,7 @@ export default function Simulation() {
                     </h1>
                 </div>
 
-                <div className="grid grid-cols-3 gap-4 md:*:grid-cols-2 lg:grid-cols-3">
+                <div className="gap-4 md:grid grid-cols-3 grid-rows-2">
                     <Card className="col-span-2 p-4 border-slate-700 shadow-xl bg-transparent">
                         <div className="aspect-video bg-gray-200 rounded mb-4 flex items-center justify-center">
                             🎥 Webcam Active (Mock)
@@ -69,7 +69,7 @@ export default function Simulation() {
                         </div>
                     </Card>
 
-                    <Tabs defaultValue="messages" className="col-span-1">
+                    <Tabs defaultValue="messages" className="col-span-1 mt-16 ">
                         <TabsList className="grid grid-cols-2">
                             <TabsTrigger value="messages">Messages</TabsTrigger>
                             <TabsTrigger value="participants">
@@ -79,7 +79,7 @@ export default function Simulation() {
 
                         <TabsContent
                             value="messages"
-                            className="p-2 h-[350px] overflow-y-auto space-y-2 ">
+                            className="p-2 h-[350px] overflow-y-auto space-y-2">
                             {messages.map((msg, idx) => (
                                 <Card
                                     key={idx}
