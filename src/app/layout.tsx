@@ -32,14 +32,14 @@ export default function RootLayout({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => setLoading(false), 2500);
+    setTimeout(() => setLoading(false), 2800);
   }, []);
 
   return (
     <html lang="en">
       <body className={`${quicksand.className} antialiased `}>
         {loading ? (
-          <div className="flex h-screen items-center justify-center bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-slate-900 via-slate-800 to-cyan-900/70">
+          <div className="flex h-screen items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
             <div className="absolute inset-0 overflow-hidden">
               <div className="absolute top-1/4 left-1/4 w-32 h-32 rounded-full bg-cyan-400/10 blur-3xl animate-pulse" />
               <div className="absolute bottom-1/3 right-1/3 w-48 h-48 rounded-full bg-indigo-500/10 blur-3xl animate-pulse delay-300" />
