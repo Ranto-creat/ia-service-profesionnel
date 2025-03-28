@@ -105,7 +105,7 @@ export default function Home() {
                                             <Sparkles className="w-8 h-8 text-pink-400" />
                                         </div>
                                         <h2 className="text-xl font-semibold text-white">
-                                            Ask Anything
+                                            Ask Anything .
                                         </h2>
                                         <p className="text-white/60">
                                             Get instant answers to your
