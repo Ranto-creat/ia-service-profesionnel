@@ -1,11 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Search, BookOpen, MapPin, GraduationCap } from 'lucide-react';
+import {  useState } from 'react';
+import { Search, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { CourseCard } from '@/components/CardComponent';
-import { AILoader } from '@/components/ui/loader';
 
 interface Course {
     id: string;
@@ -19,7 +18,6 @@ interface Course {
 }
 
 function HardSkill() {
-    const [selectedProfession, setSelectedProfession] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     const [showLocalCourses, setShowLocalCourses] = useState(false);
 
