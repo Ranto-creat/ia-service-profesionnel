@@ -90,9 +90,18 @@ const MobileNavigation = () => {
     };
 
     useEffect(() => {
-        document
-            .getElementById('content')!
-            .addEventListener('click', (evt) => menuCloseClickHandler());
+        const contentElement = document.getElementById('content');
+        const handleClick = () => menuCloseClickHandler();
+
+        if (contentElement) {
+            contentElement.addEventListener('click', handleClick);
+        }
+
+        return () => {
+            if (contentElement) {
+                contentElement.removeEventListener('click', handleClick);
+            }
+        };
     }, []);
 
     return (
@@ -101,11 +110,19 @@ const MobileNavigation = () => {
                 className={`cursor-pointer overflow-hidden rounded bg-neutral-100 transition-all duration-200 ease-in ${
                     isOpen ? 'h-14' : 'h-0'
                 }`}
-                onClick={(event) => menuCloseClickHandler()}>
+                onClick={menuCloseClickHandler}>
                 <div className="flex justify-center space-x-4 font-bold text-neutral-700">
-                    <NavItem link={'/'} Icon={<Home size={20} />} />
-                    <NavItem link={'/hard'} Icon={<BookOpen size={20} />} />
-                    <NavItem link={'/soft'} Icon={<Speech size={20} />} />
+                    <NavItem link={'/'} Icon={<Home size={20} />} label={''} />
+                    <NavItem
+                        link={'/hard'}
+                        Icon={<BookOpen size={20} />}
+                        label={''}
+                    />
+                    <NavItem
+                        link={'/soft'}
+                        Icon={<Speech size={20} />}
+                        label={''}
+                    />
                 </div>
                 <div className="mt-auto border-y">
                     <div className="flex cursor-pointer items-center gap-4 border-l-4 border-transparent p-4 text-sm hover:border-neutral-800 hover:bg-white">
@@ -116,7 +133,7 @@ const MobileNavigation = () => {
 
             <div
                 className="flex w-full items-center justify-between rounded bg-neutral-200 p-2"
-                onClick={(event) => menuOpenClickHandler(event)}>
+                onClick={menuOpenClickHandler}>
                 <h1 className="text-sm font-bold text-neutral-700">Menu</h1>
                 <Plus className={`${isOpen && 'rotate-45'} text-neutral-700`} />
             </div>
