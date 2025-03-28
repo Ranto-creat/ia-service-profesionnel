@@ -70,9 +70,15 @@ export default function Simulation() {
                     </Card>
 
                     <Tabs defaultValue="messages" className="col-span-1 mt-16 ">
-                        <TabsList className="grid grid-cols-2">
-                            <TabsTrigger value="messages">Messages</TabsTrigger>
-                            <TabsTrigger value="participants">
+                        <TabsList className="grid grid-cols-2 bg-purple-800">
+                            <TabsTrigger
+                                value="messages"
+                                className="cursor-pointer">
+                                Messages
+                            </TabsTrigger>
+                            <TabsTrigger
+                                value="participants"
+                                className="cursor-pointer">
                                 Participants
                             </TabsTrigger>
                         </TabsList>
@@ -90,8 +96,11 @@ export default function Simulation() {
                                     {msg.text}
                                 </Card>
                             ))}
-                            <div className="flex items-center gap-2 mt-4">
-                                <Textarea placeholder="Votre réponse..." />
+                            <div className="flex items-end gap-2 mt-4">
+                                <Textarea
+                                    placeholder="Votre réponse..."
+                                    className="placeholder:bg-transparent"
+                                />
                                 <Button>Envoyer</Button>
                             </div>
                         </TabsContent>
