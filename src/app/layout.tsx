@@ -1,39 +1,39 @@
-"use client";
+'use client';
 
-import React, { MouseEventHandler, useEffect, useState } from "react";
+import React, { MouseEventHandler, useEffect, useState } from 'react';
 
-import { usePathname } from "next/navigation";
-import Link from "next/link";
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 
-import type { Metadata } from "next";
+import type { Metadata } from 'next';
 
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono } from 'next/font/google';
 
-import "./globals.css";
+import './globals.css';
 
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from '@/components/theme-provider';
 
 import {
-  DollarSign,
-  ArrowLeftRight,
-  LogOut,
-  MessagesSquare,
-  Search,
-  TrendingUp,
-  Plus,
-  Home,
-  Heart,
-} from "lucide-react";
-import { AILoader } from "@/components/ui/loader";
+    DollarSign,
+    ArrowLeftRight,
+    LogOut,
+    MessagesSquare,
+    Search,
+    TrendingUp,
+    Plus,
+    Home,
+    Heart,
+} from 'lucide-react';
+import { AILoader } from '@/components/ui/loader';
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+    variable: '--font-geist-sans',
+    subsets: ['latin'],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+    variable: '--font-geist-mono',
+    subsets: ['latin'],
 });
 
 // export const metadata: Metadata = {
@@ -42,174 +42,173 @@ const geistMono = Geist_Mono({
 // };
 
 export default function RootLayout({
-  children,
+    children,
 }: Readonly<{
-  children: React.ReactNode;
+    children: React.ReactNode;
 }>) {
-  
-  const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    setTimeout(() => setLoading(false), 4000);
-  }, []);
+    useEffect(() => {
+        setTimeout(() => setLoading(false), 2500);
+    }, []);
 
-  return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased `}
-      >
-        {loading ? (
-          <div className="flex h-screen items-center justify-center bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-slate-900 via-slate-800 to-cyan-900/70">
-            <div className="absolute inset-0 overflow-hidden">
-              <div className="absolute top-1/4 left-1/4 w-32 h-32 rounded-full bg-cyan-400/10 blur-3xl animate-pulse" />
-              <div className="absolute bottom-1/3 right-1/3 w-48 h-48 rounded-full bg-indigo-500/10 blur-3xl animate-pulse delay-300" />
-              <div className="absolute top-1/3 right-1/4 w-64 h-64 rounded-full bg-slate-700/20 blur-3xl animate-pulse delay-700" />
-            </div>
-            <AILoader />
-          </div>
-        ) : (
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <div>
-              <div className="fixed bottom-0 z-20 flex w-full cursor-pointer flex-col gap-4 px-4 py-6 md:hidden">
-                <MobileNavigation />
-              </div>
-
-              <div className="fixed hidden h-screen w-18 flex-col items-center justify-between bg-[#1a1e24] md:flex">
-                <div className="flex flex-col items-center justify-between h-full">
-                  <div className="py-4 cursor-pointer hover:text-purple-400">
-                    <Heart color="white" size={20} />
-                  </div>
-
-                  <div className="my-10 font-bold text-neutral-700">
-                    <NavItem link={"/"} Icon={<Home size={20} />} />
-
-                    <NavItem link={"/hard"} Icon={<DollarSign size={20} />} />
-
-                    <NavItem
-                      link={"/soft"}
-                      Icon={<ArrowLeftRight size={20} />}
-                    />
-                  </div>
-
-                  <div>
-                    <div className="cursor-pointer text-sm hover:text-purple-400">
-                      <LogOut size={20} />
+    return (
+        <html lang="en">
+            <body
+                className={`${geistSans.variable} ${geistMono.variable} antialiased `}>
+                {loading ? (
+                    <div className="flex h-screen items-center justify-center bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-slate-900 via-slate-800 to-cyan-900/70">
+                        <div className="absolute inset-0 overflow-hidden">
+                            <div className="absolute top-1/4 left-1/4 w-32 h-32 rounded-full bg-cyan-400/10 blur-3xl animate-pulse" />
+                            <div className="absolute bottom-1/3 right-1/3 w-48 h-48 rounded-full bg-indigo-500/10 blur-3xl animate-pulse delay-300" />
+                            <div className="absolute top-1/3 right-1/4 w-64 h-64 rounded-full bg-slate-700/20 blur-3xl animate-pulse delay-700" />
+                        </div>
+                        <AILoader />
                     </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+                ) : (
+                    <ThemeProvider
+                        attribute="class"
+                        defaultTheme="system"
+                        enableSystem
+                        disableTransitionOnChange>
+                        <div>
+                            <div className="fixed bottom-0 z-20 flex w-full cursor-pointer flex-col gap-4 px-4 py-6 md:hidden">
+                                <MobileNavigation />
+                            </div>
 
-            <div
-              className="relative grow px-4 py-14 ml-18 bg-[#1b242e]"
-              id="content"
-            >
-              {children}
-            </div>
-          </ThemeProvider>
-        )}
-      </body>
-    </html>
-  );
+                            <div className="fixed hidden h-screen w-18 flex-col items-center justify-between bg-[#1a1e24] md:flex">
+                                <div className="flex flex-col items-center justify-between h-full">
+                                    <div className="py-4 cursor-pointer hover:text-purple-400">
+                                        <Heart color="white" size={20} />
+                                    </div>
+
+                                    <div className="my-10 font-bold text-neutral-700">
+                                        <NavItem
+                                            link={'/'}
+                                            Icon={<Home size={20} />}
+                                        />
+
+                                        <NavItem
+                                            link={'/hard'}
+                                            Icon={<DollarSign size={20} />}
+                                        />
+
+                                        <NavItem
+                                            link={'/soft'}
+                                            Icon={<ArrowLeftRight size={20} />}
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <div className="cursor-pointer text-sm hover:text-purple-400">
+                                            <LogOut size={20} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            className="relative grow px-4 py-14 ml-18 bg-[#1b242e]"
+                            id="content">
+                            {children}
+                        </div>
+                    </ThemeProvider>
+                )}
+            </body>
+        </html>
+    );
 }
 
 type INavItem = {
-  Icon: React.ReactNode;
-  link: string;
+    Icon: React.ReactNode;
+    link: string;
 };
 
 function NavItem({ Icon, link }: INavItem) {
-  const [isVisited, setIsVisited] = useState(false);
+    const [isVisited, setIsVisited] = useState(false);
 
-  const pathname = usePathname();
+    const pathname = usePathname();
 
-  useEffect(() => {
-    pathname.endsWith(link) ? setIsVisited(true) : setIsVisited(false);
-  }, [link, pathname]);
+    useEffect(() => {
+        pathname.endsWith(link) ? setIsVisited(true) : setIsVisited(false);
+    }, [link, pathname]);
 
-  return (
-    <Link
-      href={link}
-      className={`flex cursor-pointer items-center gap-4 border-l-4 p-4 text-sm  hover:text-purple-400 ${
-        isVisited
-          ? "border-neutral-800 dark:text-purple-400"
-          : "border-transparent"
-      }`}
-    >
-      {Icon}
-    </Link>
-  );
+    return (
+        <Link
+            href={link}
+            className={`flex cursor-pointer items-center gap-4 border-l-4 p-4 text-sm  hover:text-purple-400 ${
+                isVisited
+                    ? 'border-neutral-800 dark:text-purple-400'
+                    : 'border-transparent'
+            }`}>
+            {Icon}
+        </Link>
+    );
 }
 
 const MobileNavigation = () => {
-  const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
-  const menuOpenClickHandler: MouseEventHandler<HTMLDivElement> = () => {
-    document.getElementById("content")!.classList.toggle("blur-sm");
-    setIsOpen(!isOpen);
-  };
+    const menuOpenClickHandler: MouseEventHandler<HTMLDivElement> = () => {
+        document.getElementById('content')!.classList.toggle('blur-sm');
+        setIsOpen(!isOpen);
+    };
 
-  const menuCloseClickHandler = () => {
-    document.getElementById("content")!.classList.remove("blur-sm");
-    setIsOpen(false);
-  };
+    const menuCloseClickHandler = () => {
+        document.getElementById('content')!.classList.remove('blur-sm');
+        setIsOpen(false);
+    };
 
-  useEffect(() => {
-    document
-      .getElementById("content")!
-      .addEventListener("click", (evt) => menuCloseClickHandler());
-  }, []);
+    useEffect(() => {
+        document
+            .getElementById('content')!
+            .addEventListener('click', (evt) => menuCloseClickHandler());
+    }, []);
 
-  return (
-    <>
-      <div
-        className={`cursor-pointer overflow-hidden rounded bg-neutral-100 transition-all duration-200 ease-in ${
-          isOpen ? "h-64" : "h-0"
-        }`}
-        onClick={(event) => menuCloseClickHandler()}
-      >
-        <div className="my-10 flex flex-col font-bold text-neutral-700">
-          <NavItem link={"/dashboard"} Icon={<Home size={20} />} />
+    return (
+        <>
+            <div
+                className={`cursor-pointer overflow-hidden rounded bg-neutral-100 transition-all duration-200 ease-in ${
+                    isOpen ? 'h-64' : 'h-0'
+                }`}
+                onClick={(event) => menuCloseClickHandler()}>
+                <div className="my-10 flex flex-col font-bold text-neutral-700">
+                    <NavItem link={'/dashboard'} Icon={<Home size={20} />} />
 
-          <NavItem
-            link={"/dashboard/accounts"}
-            Icon={<DollarSign size={20} />}
-          />
+                    <NavItem
+                        link={'/dashboard/accounts'}
+                        Icon={<DollarSign size={20} />}
+                    />
 
-          <NavItem
-            link={"/dashboard/transactions"}
-            Icon={<ArrowLeftRight size={20} />}
-          />
+                    <NavItem
+                        link={'/dashboard/transactions'}
+                        Icon={<ArrowLeftRight size={20} />}
+                    />
 
-          <NavItem
-            link={"/dashboard/investissements"}
-            Icon={<TrendingUp size={20} />}
-          />
+                    <NavItem
+                        link={'/dashboard/investissements'}
+                        Icon={<TrendingUp size={20} />}
+                    />
 
-          <NavItem
-            link={"/dashboard/faq"}
-            Icon={<MessagesSquare size={20} />}
-          />
-        </div>
-        <div className="mt-auto border-y">
-          <div className="flex cursor-pointer items-center gap-4 border-l-4 border-transparent p-4 text-sm hover:border-neutral-800 hover:bg-white">
-            <LogOut size={20} />
-          </div>
-        </div>
-      </div>
+                    <NavItem
+                        link={'/dashboard/faq'}
+                        Icon={<MessagesSquare size={20} />}
+                    />
+                </div>
+                <div className="mt-auto border-y">
+                    <div className="flex cursor-pointer items-center gap-4 border-l-4 border-transparent p-4 text-sm hover:border-neutral-800 hover:bg-white">
+                        <LogOut size={20} />
+                    </div>
+                </div>
+            </div>
 
-      <div
-        className="flex w-full items-center justify-between rounded bg-neutral-200 p-2"
-        onClick={(event) => menuOpenClickHandler(event)}
-      >
-        <h1 className="text-sm font-bold text-neutral-700">Menu</h1>
-        <Plus className={`${isOpen && "rotate-45"}`} />
-      </div>
-    </>
-  );
+            <div
+                className="flex w-full items-center justify-between rounded bg-neutral-200 p-2"
+                onClick={(event) => menuOpenClickHandler(event)}>
+                <h1 className="text-sm font-bold text-neutral-700">Menu</h1>
+                <Plus className={`${isOpen && 'rotate-45'}`} />
+            </div>
+        </>
+    );
 };
