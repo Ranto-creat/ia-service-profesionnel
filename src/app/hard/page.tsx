@@ -20,6 +20,7 @@ interface Course {
 function HardSkill() {
     const [searchQuery, setSearchQuery] = useState('');
     const [showLocalCourses, setShowLocalCourses] = useState(false);
+    const [searchResults, setSearchResults] = useState<Course[]>([]); 
 
     const dummyCourses: Course[] = [
         {
@@ -57,9 +58,35 @@ function HardSkill() {
         },
     ];
 
+    const handleSearch = async () => {
+        if (!searchQuery.trim()) return;
+
+        const formattedQuery = searchQuery.trim().replace(/\s+/g, '+'); 
+        const apiUrl = `https://fetch-websites.vercel.app/api/search?q=${formattedQuery}`;
+
+        try {
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+
+            const coursesFromApi = data.results.map((result: any) => ({
+                id: result.title, 
+                title: result.title,
+                provider: result.type,
+                type: result.type === 'gratuit' ? 'free' : 'premium',
+                duration: result.duration,
+                rating: parseFloat(result.evaluation),
+                url: result.link,
+                description: result.summary,
+            }));
+
+            setSearchResults(coursesFromApi);
+        } catch (error) {
+            console.error('Erreur de recherche:', error);
+        }
+    };
+
     return (
         <div className="min-h-screen py-4">
-            {/* Header */}
             <header>
                 <div className="max-w-7xl mx-auto px-4 py-6">
                     <h1 className="text-3xl font-bold text-zinc-200">
@@ -68,9 +95,7 @@ function HardSkill() {
                 </div>
             </header>
 
-            {/* Main Content */}
             <main className="max-w-7xl mx-auto px-4 py-8">
-                {/* Search Section */}
                 <div className=" bg-transparent backdrop-blur-sm rounded-xl border border-slate-700 shadow-xl p-6 mb-8">
                     <div className="flex flex-col md:flex-row gap-4">
                         <div className="flex-1">
@@ -78,7 +103,6 @@ function HardSkill() {
                                 Rechercher un métier
                             </label>
 
-                            {/* *** Search Handling *** */}
                             <div className="relative">
                                 <Input
                                     type="text"
@@ -88,13 +112,10 @@ function HardSkill() {
        transition-all duration-200"
                                     placeholder="Rechercher des formations..."
                                     value={searchQuery}
-                                    onChange={(e) =>
-                                        setSearchQuery(e.target.value)
-                                    }
+                                    onChange={(e) => setSearchQuery(e.target.value)}
                                     onKeyDown={(e) => {
                                         if (e.key === 'Enter') {
-                                            // handleSearch()
-                                            //Put the Func here ***NATA***
+                                            handleSearch();
                                         }
                                     }}
                                 />
@@ -105,21 +126,23 @@ function HardSkill() {
                             <Button
                                 variant="outline"
                                 className="w-full md:w-auto border border-slate-600 bg-slate-700/50 text-blue-200 hover:text-white hover:bg-indigo-600/50 transition-all duration-200"
-                                onClick={() =>
-                                    setShowLocalCourses(!showLocalCourses)
-                                }>
+                                onClick={() => setShowLocalCourses(!showLocalCourses)}>
                                 <MapPin className="mr-2 h-4 w-4 " />
-                                {showLocalCourses
-                                    ? 'Formations en ligne'
-                                    : 'Formations locales'}
+                                {showLocalCourses ? 'Formations en ligne' : 'Formations locales'}
                             </Button>
                         </div>
                     </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {dummyCourses.map((course) => (
-                        <CourseCard key={course.id} course={course} />
-                    ))}
+                    {searchResults.length > 0 ? (
+                        searchResults.map((course) => (
+                            <CourseCard key={course.id} course={course} />
+                        ))
+                    ) : (
+                        dummyCourses.map((course) => (
+                            <CourseCard key={course.id} course={course} />
+                        ))
+                    )}
                 </div>
             </main>
         </div>
