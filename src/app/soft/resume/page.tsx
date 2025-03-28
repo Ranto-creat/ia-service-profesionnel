@@ -48,7 +48,7 @@ export default function AnalyseCV() {
             setResult(data.suggestions);
         } catch (err) {
             setError(
-                "Impossible d'analyser le CV. Vérifiez votre connexion et réessayez."
+                "Impossible d'analyser le CV. Vérifiez votre connexion et réessayez."+err
             );
         } finally {
             setUploading(false);

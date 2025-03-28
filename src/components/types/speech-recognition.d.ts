@@ -20,7 +20,9 @@ declare interface SpeechRecognition extends EventTarget {
     message: string;
   }
   
+  // eslint-disable-next-line no-var
   declare var webkitSpeechRecognition: typeof SpeechRecognition;
   
+  // eslint-disable-next-line no-var
   declare var webkitSpeechRecognition: typeof SpeechRecognition;
   
