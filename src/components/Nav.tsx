@@ -1,29 +1,28 @@
-'use client';
+"use client";
 
-import React, { MouseEventHandler, useEffect, useState } from 'react';
-
-import { usePathname } from 'next/navigation';
-import Link from 'next/link';
-
+import React, { MouseEventHandler, useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 import {
-    DollarSign,
-    ArrowLeftRight,
-    LogOut,
-    MessagesSquare,
-    TrendingUp,
-    Plus,
-    Home,
-    Heart,
-    BookOpen,
-    Speech,
-} from 'lucide-react';
+  DollarSign,
+  ArrowLeftRight,
+  LogOut,
+  MessagesSquare,
+  TrendingUp,
+  Plus,
+  Home,
+  Heart,
+  BookOpen,
+  Speech,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function Nav() {
-    return (
-        <>
-            <div className="fixed bottom-0 z-20 flex w-full cursor-pointer flex-col gap-4 px-4 py-6 md:hidden">
-                <MobileNavigation />
-            </div>
+  return (
+    <>
+      <div className="fixed bottom-0 z-20 w-full px-4 py-6 md:hidden">
+        <MobileNavigation />
+      </div>
 
             <div className="fixed hidden h-screen w-18 flex-col items-center justify-between bg-[#1a1e24] md:flex">
                 <div className="flex flex-col items-center justify-between h-full">
@@ -51,8 +50,9 @@ export default function Nav() {
 }
 
 type INavItem = {
-    Icon: React.ReactNode;
-    link: string;
+  Icon: React.ReactNode;
+  link: string;
+  label: string;
 };
 
 function NavItem({ Icon, link }: INavItem) {
@@ -121,6 +121,22 @@ const MobileNavigation = () => {
                 <h1 className="text-sm font-bold text-neutral-700">Menu</h1>
                 <Plus className={`${isOpen && 'rotate-45'} text-neutral-700`} />
             </div>
-        </>
-    );
+          </div>
+        </div>
+      </div>
+
+      <div
+        className="flex items-center justify-between rounded-xl bg-slate-900/95 p-4 backdrop-blur-lg"
+        onClick={menuOpenClickHandler}
+      >
+        <h1 className="font-medium text-white">Menu</h1>
+        <Plus
+          className={cn(
+            "text-white transition-transform duration-300",
+            isOpen && "rotate-45"
+          )}
+        />
+      </div>
+    </>
+  );
 };

@@ -116,6 +116,7 @@
     * {
         @apply border-border outline-ring/50;
     }
+
     body {
         @apply bg-background text-foreground;
     }
@@ -132,4 +133,29 @@
 
 .tg_font {
     font-family: 'Geist Sans', sans-serif;
+}
+
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.2;
+    }
+
+    50% {
+        transform: scale(1.05);
+        opacity: 0.4;
+    }
+}
+
+@keyframes progressBar {
+    0% {
+        width: 10%;
+    }
+
+    100% {
+        width: 90%;
+    }
 }
