@@ -51,6 +51,7 @@ function InterviewSimulator() {
     } else {
       console.error("La reconnaissance vocale n'est pas supportée par votre navigateur.");
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const startListening = () => {

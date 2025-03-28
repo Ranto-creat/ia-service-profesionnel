@@ -69,6 +69,7 @@ function HardSkill() {
             const response = await fetch(apiUrl);
             const data = await response.json();
 
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const coursesFromApi = data.results.map((result: any) => ({
                 id: result.title, 
                 title: result.title,
