@@ -3,6 +3,7 @@ import { Card } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { CircleArrowUp, ImagePlus } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Home() {
     return (
@@ -16,12 +17,14 @@ export default function Home() {
                 <div className="py-4 my-4">How can I help ? </div>
 
                 <div className="flex gap-4">
-                    <Card className="px-6 py-10 card_1">Find Trainnings</Card>
-                    <Card className="px-6 py-10 card_2">
-                        Simule an Interview
+                    <Card className="cursor-pointer px-6 py-10 card_1">
+                        <Link href="/hard">Find Trainnings</Link>
                     </Card>
-                    <Card className="px-6 py-10 card_3">
-                        Just Want to ask something :)
+                    <Card className="cursor-pointer px-6 py-10 card_2">
+                        <Link href="/soft">Simule an Interview</Link>
+                    </Card>
+                    <Card className="cursor-pointer px-6 py-10 card_3">
+                        <Link href="/">Just Want to ask something :)</Link>
                     </Card>
                 </div>
             </div>

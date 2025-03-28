@@ -121,14 +121,15 @@
     }
 }
 
+/* import font format otf*/
+
 @font-face {
-    font-family: 'tg';
-    src: url('/public/fonnts.com-tgpraktikal-regular.otf');
-    font-weight: 800;
-    /* font-style: normal; */
+    font-family: 'tg_font';
+    src: url('/public/fonnts.com-tgpraktikal-regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
 }
 
 .tg_font {
-    font-family: 'tg', sans-serif;
+    font-family: 'Geist Sans', sans-serif;
 }
-
