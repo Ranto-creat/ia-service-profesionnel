@@ -30,8 +30,10 @@ export default function Home() {
 
                 {/* Main content */}
                 <div className="flex-1 container flex flex-col items-center justify-center gap-8 py-12">
-                    <div>
-                        <AnimateLottie />
+                    <div className="relative">
+                        <div className="absolute top-[-6rem] left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                            <AnimateLottie />
+                        </div>
                     </div>
 
                     <motion.h1
