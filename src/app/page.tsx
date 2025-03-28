@@ -13,6 +13,7 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import AnimateLottie from '@/components/lottie';
 
 export default function Home() {
     return (
@@ -29,6 +30,10 @@ export default function Home() {
 
                 {/* Main content */}
                 <div className="flex-1 container flex flex-col items-center justify-center gap-8 py-12">
+                    <div>
+                        <AnimateLottie />
+                    </div>
+
                     <motion.h1
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
