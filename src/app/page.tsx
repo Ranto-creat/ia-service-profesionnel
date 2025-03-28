@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import HardSkill from "./hardSkill/pages";
+import HardSkill from "./hardSkillSearch/pages";
 
 export default function Home() {
   return (
