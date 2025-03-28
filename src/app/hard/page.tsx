@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Search, BookOpen, MapPin, GraduationCap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { CourseCard } from '@/components/CardComponent';
+import { AILoader } from '@/components/ui/loader';
 
 interface Course {
     id: string;
@@ -14,6 +15,7 @@ interface Course {
     duration: string;
     rating: number;
     url: string;
+    description: string;
 }
 
 function HardSkill() {
@@ -30,6 +32,7 @@ function HardSkill() {
             duration: '40h',
             rating: 4.5,
             url: '#',
+            description: "Ce cours complet vous enseignera les fondamentaux du développement web modern"
         },
         {
             id: '2',
@@ -39,6 +42,7 @@ function HardSkill() {
             duration: '60h',
             rating: 4.8,
             url: '#',
+            description: "Ce cours vous enseignera les fondamentaux de la data science"
         },
         {
             id: '3',
@@ -48,6 +52,7 @@ function HardSkill() {
             duration: '60h',
             rating: 4.8,
             url: '#',
+            description: "Ce cours complet vous enseignera les fondamentaux du développement web modern"
         },
     ];
 

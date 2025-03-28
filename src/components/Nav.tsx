@@ -1,58 +1,68 @@
-'use client';
+"use client";
 
-import React, { MouseEventHandler, useEffect, useState } from 'react';
-
-import { usePathname } from 'next/navigation';
-import Link from 'next/link';
-
+import React, { MouseEventHandler, useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 import {
-    DollarSign,
-    ArrowLeftRight,
-    LogOut,
-    MessagesSquare,
-    TrendingUp,
-    Plus,
-    Home,
-    Heart,
-    BookOpen,
-    Speech,
-} from 'lucide-react';
+  DollarSign,
+  ArrowLeftRight,
+  LogOut,
+  MessagesSquare,
+  TrendingUp,
+  Plus,
+  Home,
+  Heart,
+  BookOpen,
+  Speech,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function Nav() {
-    return (
-        <>
-            <div className="fixed bottom-0 z-20 flex w-full cursor-pointer flex-col gap-4 px-4 py-6 md:hidden">
-                <MobileNavigation />
+  return (
+    <>
+      <div className="fixed bottom-0 z-20 w-full px-4 py-6 md:hidden">
+        <MobileNavigation />
+      </div>
+
+      <div className="fixed hidden h-screen w-20 flex-col items-center justify-between bg-gradient-to-b from-slate-900 to-slate-800 shadow-xl md:flex">
+        <div className="flex h-full w-full flex-col items-center justify-between">
+          <div className="w-full p-4">
+            <div className="flex h-12 w-full items-center justify-center rounded-xl bg-white/10 transition-all hover:bg-white/20">
+              <Heart
+                className="text-rose-500 transition-transform hover:scale-110"
+                size={24}
+              />
             </div>
+          </div>
 
-            <div className="fixed hidden h-screen w-18 flex-col items-center justify-between bg-[#1a1e24] md:flex">
-                <div className="flex flex-col items-center justify-between h-full">
-                    <div className="py-4 cursor-pointer hover:text-purple-400">
-                        <Heart color="white" size={20} />
-                    </div>
+          <div className="flex w-full flex-col items-center gap-2 py-8">
+            <NavItem link={"/"} Icon={<Home size={24} />} label="Home" />
+            <NavItem
+              link={"/hard"}
+              Icon={<BookOpen size={24} />}
+              label="Learn"
+            />
+            <NavItem link={"/soft"} Icon={<Speech size={24} />} label="Chat" />
+          </div>
 
-                    <div className="my-10 font-bold text-neutral-700">
-                        <NavItem link={'/'} Icon={<Home size={20} />} />
-
-                        <NavItem link={'/hard'} Icon={<BookOpen size={20} />} />
-
-                        <NavItem link={'/soft'} Icon={<Speech size={20} />} />
-                    </div>
-
-                    <div>
-                        <div className="cursor-pointer text-sm hover:text-purple-400">
-                            <LogOut size={20} />
-                        </div>
-                    </div>
-                </div>
+          <div className="w-full p-4">
+            <div className="group flex h-12 w-full cursor-pointer items-center justify-center rounded-xl bg-white/10 transition-all hover:bg-red-500/20">
+              <LogOut
+                className="text-white/70 transition-all group-hover:text-red-500"
+                size={24}
+              />
             </div>
-        </>
-    );
+          </div>
+        </div>
+      </div>
+    </>
+  );
 }
 
 type INavItem = {
-    Icon: React.ReactNode;
-    link: string;
+  Icon: React.ReactNode;
+  link: string;
+  label: string;
 };
 
 function NavItem({ Icon, link }: INavItem) {
@@ -121,6 +131,22 @@ const MobileNavigation = () => {
                 <h1 className="text-sm font-bold text-neutral-700">Menu</h1>
                 <Plus className={`${isOpen && 'rotate-45'} text-neutral-700`} />
             </div>
-        </>
-    );
+          </div>
+        </div>
+      </div>
+
+      <div
+        className="flex items-center justify-between rounded-xl bg-slate-900/95 p-4 backdrop-blur-lg"
+        onClick={menuOpenClickHandler}
+      >
+        <h1 className="font-medium text-white">Menu</h1>
+        <Plus
+          className={cn(
+            "text-white transition-transform duration-300",
+            isOpen && "rotate-45"
+          )}
+        />
+      </div>
+    </>
+  );
 };
