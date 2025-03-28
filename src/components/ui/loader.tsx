@@ -9,20 +9,20 @@ export function AILoader({
 }: {
     message?: string;
 }) {
-    const [rotation, setRotation] = useState(0);
-    const requestRef = useRef<number>();
-    const particlesRef = useRef<HTMLDivElement>(null);
-    const [dots, setDots] = useState('');
+  const [rotation, setRotation] = useState(0);
+  const requestRef = useRef<number>(0);
+  const particlesRef = useRef<HTMLDivElement>(null);
+  const [dots, setDots] = useState("");
 
-    // Animation fluide avec requestAnimationFrame
-    useEffect(() => {
-        const animate = (time: number) => {
-            setRotation((prev) => (prev + 0.5) % 360);
-            requestRef.current = requestAnimationFrame(animate);
-        };
-        requestRef.current = requestAnimationFrame(animate);
-        return () => cancelAnimationFrame(requestRef.current!);
-    }, []);
+  // Animation fluide avec requestAnimationFrame
+  useEffect(() => {
+    const animate = () => {
+      setRotation((prev) => (prev + 0.5) % 360);
+      requestRef.current = requestAnimationFrame(animate);
+    };
+    requestRef.current = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(requestRef.current!);
+  }, []);
 
     // Animation des points de suspension
     useEffect(() => {
@@ -48,32 +48,32 @@ export function AILoader({
             particle.style.top = '50%';
             particle.style.transform = 'translate(-50%, -50%)';
 
-            const angle = (i / 12) * Math.PI * 2;
-            const animation = particle.animate(
-                [
-                    {
-                        transform: `translate(-50%, -50%) translate(0px, 0px)`,
-                        opacity: 0,
-                    },
-                    {
-                        transform: `translate(-50%, -50%) translate(${
-                            Math.cos(angle) * 60
-                        }px, ${Math.sin(angle) * 60}px)`,
-                        opacity: 1,
-                    },
-                    {
-                        transform: `translate(-50%, -50%) translate(${
-                            Math.cos(angle) * 100
-                        }px, ${Math.sin(angle) * 100}px)`,
-                        opacity: 0,
-                    },
-                ],
-                {
-                    duration: 2000 + Math.random() * 1000,
-                    iterations: Infinity,
-                    delay: i * 150,
-                }
-            );
+      const angle = (i / 12) * Math.PI * 2;
+     /* const animation =*/ particle.animate(
+        [
+          {
+            transform: `translate(-50%, -50%) translate(0px, 0px)`,
+            opacity: 0,
+          },
+          {
+            transform: `translate(-50%, -50%) translate(${
+              Math.cos(angle) * 60
+            }px, ${Math.sin(angle) * 60}px)`,
+            opacity: 1,
+          },
+          {
+            transform: `translate(-50%, -50%) translate(${
+              Math.cos(angle) * 100
+            }px, ${Math.sin(angle) * 100}px)`,
+            opacity: 0,
+          },
+        ],
+        {
+          duration: 2000 + Math.random() * 1000,
+          iterations: Infinity,
+          delay: i * 150,
+        }
+      );
 
             particles.appendChild(particle);
         }

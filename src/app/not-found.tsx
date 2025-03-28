@@ -40,7 +40,7 @@ export default function NotFound() {
           </h2>
 
           <p className="mt-4 text-gray-500">
-            Désolé, la page que vous recherchez n'existe pas ou a été déplacée.
+            Désolé, la page que vous recherchez n existe pas ou a été déplacée.
           </p>
 
           <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
@@ -48,7 +48,7 @@ export default function NotFound() {
               href="/"
               className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition duration-200 transform hover:scale-105"
             >
-              Retour à l'accueil
+              Retour à l accueil
             </Link>
 
             <BackButton />

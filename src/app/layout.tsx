@@ -1,8 +1,7 @@
 "use client";
 
-import React, { MouseEventHandler, useEffect, useState } from "react";
+import React, {  useEffect, useState } from 'react';
 
-import "./globals.css";
 
 import { ThemeProvider } from "@/components/theme-provider";
 
