@@ -1,5 +1,5 @@
 // just return a hello world
 
 export default function HardPage() {
-    return <div>Hello World</div>;
+    return <div className="min-h-screen py-4">Hello World</div>;
 }
