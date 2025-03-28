@@ -112,17 +112,9 @@ const MobileNavigation = () => {
                 }`}
                 onClick={menuCloseClickHandler}>
                 <div className="flex justify-center space-x-4 font-bold text-neutral-700">
-                    <NavItem link={'/'} Icon={<Home size={20} />} label={''} />
-                    <NavItem
-                        link={'/hard'}
-                        Icon={<BookOpen size={20} />}
-                        label={''}
-                    />
-                    <NavItem
-                        link={'/soft'}
-                        Icon={<Speech size={20} />}
-                        label={''}
-                    />
+                    <NavItem link={'/'} Icon={<Home size={20} />} />
+                    <NavItem link={'/hard'} Icon={<BookOpen size={20} />} />
+                    <NavItem link={'/soft'} Icon={<Speech size={20} />} />
                 </div>
                 <div className="mt-auto border-y">
                     <div className="flex cursor-pointer items-center gap-4 border-l-4 border-transparent p-4 text-sm hover:border-neutral-800 hover:bg-white">
