@@ -46,12 +46,12 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en" suppressHydrationWarning>
+        <html lang="en">
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased `}>
                 <ThemeProvider
                     attribute="class"
-                    defaultTheme="dark"
+                    defaultTheme="system"
                     enableSystem
                     disableTransitionOnChange>
                     <div>
@@ -92,7 +92,7 @@ export default function RootLayout({
                     </div>
 
                     <div
-                        className="relative grow ml-18 bg-[#1a1e24d4]"
+                        className="relative grow px-4 py-14 ml-18 bg-[#1b242e]"
                         id="content">
                         {children}
                     </div>
