@@ -65,97 +65,71 @@ type INavItem = {
   label: string;
 };
 
-function NavItem({ Icon, link, label }: INavItem) {
-  const [isVisited, setIsVisited] = useState(false);
-  const pathname = usePathname();
+function NavItem({ Icon, link }: INavItem) {
+    const [isVisited, setIsVisited] = useState(false);
 
-  useEffect(() => {
-    setIsVisited(pathname === link);
-  }, [link, pathname]);
+    const pathname = usePathname();
 
-  return (
-    <Link href={link} className="relative w-full px-4">
-      <div
-        className={cn(
-          "group flex h-12 w-full items-center justify-center rounded-xl transition-all",
-          isVisited
-            ? "bg-white/20 text-white"
-            : "text-white/70 hover:bg-white/10 hover:text-white"
-        )}
-      >
-        {Icon}
-        <div
-          className={cn(
-            "absolute left-full ml-2 rounded-md bg-slate-800 px-2 py-1 text-sm text-white opacity-0 transition-all group-hover:opacity-100",
-            "pointer-events-none"
-          )}
-        >
-          {label}
-        </div>
-      </div>
-    </Link>
-  );
+    useEffect(() => {
+        pathname.endsWith(link) ? setIsVisited(true) : setIsVisited(false);
+    }, [link, pathname]);
+
+    return (
+        <Link
+            href={link}
+            className={`flex cursor-pointer items-center gap-4 border-l-4 p-4 text-sm text-white  hover:text-purple-400 ${
+                isVisited
+                    ? 'border-neutral-800 dark:text-purple-400'
+                    : 'border-transparent'
+            }`}>
+            {Icon}
+        </Link>
+    );
 }
 
 const MobileNavigation = () => {
-  const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
-  const menuOpenClickHandler: MouseEventHandler<HTMLDivElement> = () => {
-    document.getElementById("content")?.classList.toggle("blur-sm");
-    setIsOpen(!isOpen);
-  };
+    const menuOpenClickHandler: MouseEventHandler<HTMLDivElement> = () => {
+        document.getElementById('content')!.classList.toggle('blur-sm');
+        setIsOpen(!isOpen);
+    };
 
-  const menuCloseClickHandler = () => {
-    document.getElementById("content")?.classList.remove("blur-sm");
-    setIsOpen(false);
-  };
+    const menuCloseClickHandler = () => {
+        document.getElementById('content')!.classList.remove('blur-sm');
+        setIsOpen(false);
+    };
 
-  useEffect(() => {
-    const content = document.getElementById("content");
-    if (content) {
-      content.addEventListener("click", menuCloseClickHandler);
-      return () => content.removeEventListener("click", menuCloseClickHandler);
-    }
-  }, []);
+    useEffect(() => {
+        document
+            .getElementById('content')!
+            .addEventListener('click', (evt) => menuCloseClickHandler());
+    }, []);
 
-  return (
-    <>
-      <div
-        className={cn(
-          "overflow-hidden rounded-2xl bg-slate-900/95 backdrop-blur-lg transition-all duration-300",
-          isOpen ? "h-[420px]" : "h-0"
-        )}
-        onClick={menuCloseClickHandler}
-      >
-        <div className="flex flex-col gap-2 p-4">
-          <NavItem link={"/dashboard"} Icon={<Home size={24} />} label="Home" />
-          <NavItem
-            link={"/dashboard/accounts"}
-            Icon={<DollarSign size={24} />}
-            label="Accounts"
-          />
-          <NavItem
-            link={"/dashboard/transactions"}
-            Icon={<ArrowLeftRight size={24} />}
-            label="Transactions"
-          />
-          <NavItem
-            link={"/dashboard/investissements"}
-            Icon={<TrendingUp size={24} />}
-            label="Investments"
-          />
-          <NavItem
-            link={"/dashboard/faq"}
-            Icon={<MessagesSquare size={24} />}
-            label="FAQ"
-          />
+    return (
+        <>
+            <div
+                className={`cursor-pointer overflow-hidden rounded bg-neutral-100 transition-all duration-200 ease-in ${
+                    isOpen ? 'h-14' : 'h-0'
+                }`}
+                onClick={(event) => menuCloseClickHandler()}>
+                <div className="flex justify-center space-x-4 font-bold text-neutral-700">
+                    <NavItem link={'/'} Icon={<Home size={20} />} />
+                    <NavItem link={'/hard'} Icon={<BookOpen size={20} />} />
+                    <NavItem link={'/soft'} Icon={<Speech size={20} />} />
+                </div>
+                <div className="mt-auto border-y">
+                    <div className="flex cursor-pointer items-center gap-4 border-l-4 border-transparent p-4 text-sm hover:border-neutral-800 hover:bg-white">
+                        <LogOut size={20} />
+                    </div>
+                </div>
+            </div>
 
-          <div className="mt-4 border-t border-white/10 pt-4">
-            <div className="group flex h-12 w-full cursor-pointer items-center justify-center rounded-xl bg-white/10 transition-all hover:bg-red-500/20">
-              <LogOut
-                className="text-white/70 transition-all group-hover:text-red-500"
-                size={24}
-              />
+            <div
+                className="flex w-full items-center justify-between rounded bg-neutral-200 p-2"
+                onClick={(event) => menuOpenClickHandler(event)}>
+                <h1 className="text-sm font-bold text-neutral-700">Menu</h1>
+                <Plus className={`${isOpen && 'rotate-45'} text-neutral-700`} />
             </div>
           </div>
         </div>

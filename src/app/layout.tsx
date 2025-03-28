@@ -46,6 +46,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
