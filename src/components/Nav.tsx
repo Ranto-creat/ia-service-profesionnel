@@ -67,7 +67,7 @@ function NavItem({ Icon, link }: INavItem) {
     return (
         <Link
             href={link}
-            className={`flex cursor-pointer items-center gap-4 border-l-4 p-4 text-sm  hover:text-purple-400 ${
+            className={`flex cursor-pointer items-center gap-4 border-l-4 p-4 text-sm text-white  hover:text-purple-400 ${
                 isVisited
                     ? 'border-neutral-800 dark:text-purple-400'
                     : 'border-transparent'
@@ -100,31 +100,13 @@ const MobileNavigation = () => {
         <>
             <div
                 className={`cursor-pointer overflow-hidden rounded bg-neutral-100 transition-all duration-200 ease-in ${
-                    isOpen ? 'h-64' : 'h-0'
+                    isOpen ? 'h-14' : 'h-0'
                 }`}
                 onClick={(event) => menuCloseClickHandler()}>
-                <div className="my-10 flex flex-col font-bold text-neutral-700">
-                    <NavItem link={'/dashboard'} Icon={<Home size={20} />} />
-
-                    <NavItem
-                        link={'/dashboard/accounts'}
-                        Icon={<DollarSign size={20} />}
-                    />
-
-                    <NavItem
-                        link={'/dashboard/transactions'}
-                        Icon={<ArrowLeftRight size={20} />}
-                    />
-
-                    <NavItem
-                        link={'/dashboard/investissements'}
-                        Icon={<TrendingUp size={20} />}
-                    />
-
-                    <NavItem
-                        link={'/dashboard/faq'}
-                        Icon={<MessagesSquare size={20} />}
-                    />
+                <div className="flex justify-center space-x-4 font-bold text-neutral-700">
+                    <NavItem link={'/'} Icon={<Home size={20} />} />
+                    <NavItem link={'/hard'} Icon={<BookOpen size={20} />} />
+                    <NavItem link={'/soft'} Icon={<Speech size={20} />} />
                 </div>
                 <div className="mt-auto border-y">
                     <div className="flex cursor-pointer items-center gap-4 border-l-4 border-transparent p-4 text-sm hover:border-neutral-800 hover:bg-white">
@@ -137,7 +119,7 @@ const MobileNavigation = () => {
                 className="flex w-full items-center justify-between rounded bg-neutral-200 p-2"
                 onClick={(event) => menuOpenClickHandler(event)}>
                 <h1 className="text-sm font-bold text-neutral-700">Menu</h1>
-                <Plus className={`${isOpen && 'rotate-45'}`} />
+                <Plus className={`${isOpen && 'rotate-45'} text-neutral-700`} />
             </div>
         </>
     );

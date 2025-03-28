@@ -12,7 +12,7 @@ export default function SoftPage() {
                 </p>
                 <div className="flex space-x-4">
                     <Button className="text-xl uppercase py-[1.5rem] px-6 border-1 border-purple-400 bg-transparent text-purple-400 rounded hover:bg-purple-400 hover:text-white cursor-pointer">
-                        <Link href="/interview">Simuler un entretien</Link>
+                        <Link href="/soft/interview">Simuler un entretien</Link>
                     </Button>
                     <Button className="text-xl uppercase py-[1.5rem] px-6 border-1 border-green-400 bg-transparent text-green-400 rounded hover:bg-green-400 hover:text-white cursor-pointer">
                         Analyser un CV

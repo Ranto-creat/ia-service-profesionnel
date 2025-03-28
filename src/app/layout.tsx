@@ -39,7 +39,7 @@ export default function RootLayout({
                     </div>
                     {/* --- Content ---- */}
                     <div
-                        className="relative grow ml-18 bg-[#1a1e24d4]"
+                        className="relative grow md:ml-18 bg-[#1a1e24d4] ml-0"
                         id="content">
                         {children}
                     </div>
