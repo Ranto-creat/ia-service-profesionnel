@@ -143,15 +143,3 @@ export function AILoader({
     </div>
   );
 }
-
-// Ajoutez ces keyframes à votre fichier globals.css
-/*
-@keyframes pulse {
-  0%, 100% { transform: scale(1); opacity: 0.2; }
-  50% { transform: scale(1.05); opacity: 0.4; }
-}
-@keyframes progressBar {
-  0% { width: 10%; }
-  100% { width: 90%; }
-}
-*/
