@@ -53,7 +53,7 @@ export function CourseCard({ course, className }: CourseCardProps) {
         <CardHeader className="pb-3">
           <div className="flex justify-between items-start gap-2">
             <Badge
-              variant={course.type === "free" ? "free" : "premium"}
+              variant={course.type === "free" ? "default" : "secondary"}
               className={cn(
                 "flex-shrink-0 font-medium",
                 course.type === "free"
@@ -191,7 +191,7 @@ export function CourseCard({ course, className }: CourseCardProps) {
                 <div className="space-y-1">
                   <p className="text-sm text-slate-400">Type de cours</p>
                   <Badge
-                    variant={course.type === "free" ? "free" : "premium"}
+                    variant={course.type === "free" ? "default" : "secondary"}
                     className={
                       course.type === "free"
                         ? "bg-emerald-500/20 text-emerald-400"
