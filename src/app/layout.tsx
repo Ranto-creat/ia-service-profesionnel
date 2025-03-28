@@ -1,26 +1,22 @@
-'use client';
+"use client";
 
-import React, { MouseEventHandler, useEffect, useState } from 'react';
+import React, { MouseEventHandler, useEffect, useState } from "react";
 
-import type { Metadata } from 'next';
+import "./globals.css";
 
-import { Geist, Geist_Mono } from 'next/font/google';
+import { ThemeProvider } from "@/components/theme-provider";
 
-import './globals.css';
+import { AILoader } from "@/components/ui/loader";
 
-import { ThemeProvider } from '@/components/theme-provider';
+import Nav from "@/components/Nav";
 
-import { AILoader } from '@/components/ui/loader';
-import Nav from '@/components/Nav';
+import { Quicksand } from "next/font/google";
 
-const geistSans = Geist({
-    variable: '--font-geist-sans',
-    subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-    variable: '--font-geist-mono',
-    subsets: ['latin'],
+const quicksand = Quicksand({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+  variable: "--font-quicksand",
 });
 
 // export const metadata: Metadata = {
@@ -29,47 +25,45 @@ const geistMono = Geist_Mono({
 // };
 
 export default function RootLayout({
-    children,
+  children,
 }: Readonly<{
-    children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-    const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        setTimeout(() => setLoading(false), 2500);
-    }, []);
+  useEffect(() => {
+    setTimeout(() => setLoading(false), 2500);
+  }, []);
 
-    return (
-        <html lang="en">
-            <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased `}>
-                {loading ? (
-                    <div className="flex h-screen items-center justify-center bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-slate-900 via-slate-800 to-cyan-900/70">
-                        <div className="absolute inset-0 overflow-hidden">
-                            <div className="absolute top-1/4 left-1/4 w-32 h-32 rounded-full bg-cyan-400/10 blur-3xl animate-pulse" />
-                            <div className="absolute bottom-1/3 right-1/3 w-48 h-48 rounded-full bg-indigo-500/10 blur-3xl animate-pulse delay-300" />
-                            <div className="absolute top-1/3 right-1/4 w-64 h-64 rounded-full bg-slate-700/20 blur-3xl animate-pulse delay-700" />
-                        </div>
-                        <AILoader />
-                    </div>
-                ) : (
-                    <ThemeProvider
-                        attribute="class"
-                        defaultTheme="system"
-                        enableSystem
-                        disableTransitionOnChange>
-                        <div>
-                            <Nav />
-                        </div>
+  return (
+    <html lang="en">
+      <body className={`${quicksand.className} antialiased `}>
+        {loading ? (
+          <div className="flex h-screen items-center justify-center bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-slate-900 via-slate-800 to-cyan-900/70">
+            <div className="absolute inset-0 overflow-hidden">
+              <div className="absolute top-1/4 left-1/4 w-32 h-32 rounded-full bg-cyan-400/10 blur-3xl animate-pulse" />
+              <div className="absolute bottom-1/3 right-1/3 w-48 h-48 rounded-full bg-indigo-500/10 blur-3xl animate-pulse delay-300" />
+              <div className="absolute top-1/3 right-1/4 w-64 h-64 rounded-full bg-slate-700/20 blur-3xl animate-pulse delay-700" />
+            </div>
+            <AILoader />
+          </div>
+        ) : (
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <div>
+              <Nav />
+            </div>
 
-                        <div
-                            className="relative grow ml-18 bg-[#1b242e]"
-                            id="content">
-                            {children}
-                        </div>
-                    </ThemeProvider>
-                )}
-            </body>
-        </html>
-    );
+            <div className="relative grow ml-18 bg-[#1b242e]" id="content">
+              {children}
+            </div>
+          </ThemeProvider>
+        )}
+      </body>
+    </html>
+  );
 }
