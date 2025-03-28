@@ -40,7 +40,7 @@ export default function Nav() {
                     </div>
 
                     <div>
-                        <div className="cursor-pointer text-sm hover:text-purple-400">
+                        <div className="cursor-pointer text-sm hover:text-purple-400 py-6">
                             <LogOut size={20} />
                         </div>
                     </div>
