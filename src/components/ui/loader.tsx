@@ -41,7 +41,7 @@ export function AILoader({
 
     for (let i = 0; i < 12; i++) {
       const particle = document.createElement("div");
-      particle.className = "absolute rounded-full bg-primary/80";
+      particle.className = "absolute rounded-full bg-secondary/80";
       particle.style.width = `${Math.random() * 6 + 4}px`;
       particle.style.height = particle.style.width;
       particle.style.left = "50%";
@@ -88,7 +88,7 @@ export function AILoader({
         {/* Sphère externe pulsante */}
         <div
           className={cn(
-            "absolute inset-0 rounded-full border-2 border-primary/20",
+            "absolute inset-0 rounded-full border-2 border-secondary/20",
             "animate-[pulse_4s_cubic-bezier(0.4,0,0.6,1)_infinite]"
           )}
         />
@@ -99,7 +99,7 @@ export function AILoader({
             key={i}
             className={cn(
               "absolute inset-0 rounded-full border-2 border-transparent",
-              "border-t-primary border-r-primary",
+              "border-t-secondary border-r-secondary",
               "animate-[spin_linear_infinite]"
             )}
             style={{
@@ -114,15 +114,15 @@ export function AILoader({
         {/* Noyau central */}
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="relative">
-            <Atom className="w-16 h-16 text-primary animate-[spin_8s_linear_infinite]" />
-            <BrainCircuit className="absolute top-1/2 left-1/2 w-8 h-8 text-primary -translate-x-1/2 -translate-y-1/2 animate-pulse" />
+            <Atom className="w-16 h-16 text-secondary animate-[spin_8s_linear_infinite]" />
+            <BrainCircuit className="absolute top-1/2 left-1/2 w-8 h-8 text-secondary -translate-x-1/2 -translate-y-1/2 animate-pulse" />
           </div>
         </div>
       </div>
 
       {/* Texte animé */}
       <div className="text-center space-y-2">
-        <h3 className="text-xl font-semibold text-primary flex justify-center items-center">
+        <h3 className="text-xl font-semibold text-secondary flex justify-center items-center">
           {message}
           {dots}
         </h3>
@@ -132,9 +132,9 @@ export function AILoader({
       </div>
 
       {/* Barre de progression */}
-      <div className="w-64 h-1.5 bg-primary/10 rounded-full overflow-hidden">
+      <div className="w-64 h-1.5 bg-secondary/10 rounded-full overflow-hidden">
         <div
-          className="h-full bg-gradient-to-r from-primary to-emerald-400 rounded-full"
+          className="h-full bg-gradient-to-r from-secondary to-emerald-400 rounded-full"
           style={{
             animation: "progressBar 2.5s ease-in-out infinite alternate",
           }}
