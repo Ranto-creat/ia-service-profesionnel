@@ -1,18 +1,15 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { useState } from 'react';
-import { GalleryHorizontal, Mic, MicOff, Video, Volume2 } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { GalleryHorizontal,  MicOff, Video, Volume2 } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 
-type SliderProps = React.ComponentProps<typeof Slider>;
 
 export default function Simulation() {
-    const [messages, setMessages] = useState([
+    const [messages] = useState([
         { sender: 'bot', text: 'Bonjour, pouvez-vous vous présenter ?' },
         {
             sender: 'user',

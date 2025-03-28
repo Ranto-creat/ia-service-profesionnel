@@ -7,22 +7,25 @@ useGLTF.preload('/robot_playground.glb');
 
 export default function Model() {
     const group = useRef<Group>(null);
-    const { nodes, materials, animations, scene } = useGLTF(
+    const {  animations, scene } = useGLTF(
         '/robot_playground.glb'
     );
-    const { actions, clips } = useAnimations(animations, scene);
+    const { actions} = useAnimations(animations, scene);
     const scroll = useScroll();
 
     useEffect(() => {
         console.log(actions);
-        //@ts-ignore
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-expect-error
         actions['Experiment'].play().paused = true;
-    }, []);
+    }, [actions]);
     useFrame(
         () =>
-            //@ts-ignore
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //@ts-expect-error
             (actions['Experiment'].time =
-                //@ts-ignore
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                //@ts-expect-error
                 (actions['Experiment'].getClip().duration * scroll.offset) / 4)
     );
     return (
