@@ -24,7 +24,7 @@ export default function Nav() {
                 <MobileNavigation />
             </div>
 
-            <div className="fixed hidden h-screen w-18 flex-col items-center justify-between bg-[#1a1e24] md:flex">
+            <div className="fixed hidden h-screen w-18 flex-col items-center justify-between bg-[#1e2636] md:flex">
                 <div className="flex flex-col items-center justify-between h-full">
                     <div className="py-4 cursor-pointer hover:text-purple-400">
                         <Heart color="white" size={20} />
