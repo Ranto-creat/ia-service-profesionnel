@@ -58,6 +58,7 @@ export default function FaceLandmarksDetection() {
     const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
     const expressionCountRef = useRef<{ [expression: string]: number }>({});
     const [feedback, setFeedback] = useState<string | null>(null);
+    const [isRunning, setIsRunning] = useState<boolean>(true);
 
     const contours = faceLandmarksDetection.util.getKeypointIndexByContour(
         faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh
@@ -74,14 +75,6 @@ export default function FaceLandmarksDetection() {
                 setCtx(context);
 
                 detectorRef.current = await setupDetector();
-
-                // Déclenche un feedback après 10 secondes
-                setTimeout(() => {
-                    const mostFrequentExpression = Object.entries(expressionCountRef.current)
-                        .sort((a, b) => b[1] - a[1])[0]?.[0] || "Aucune expression détectée";
-
-                    setFeedback(`Expression la plus détectée : ${mostFrequentExpression}`);
-                }, 10000);
             } catch (error) {
                 console.error("Erreur :", error);
             }
@@ -91,7 +84,7 @@ export default function FaceLandmarksDetection() {
     }, []);
 
     useAnimationFrame(async () => {
-        if (!detectorRef.current || !videoRef.current || !ctx) return;
+        if (!detectorRef.current || !videoRef.current || !ctx || !isRunning) return;
 
         const faces = await detectorRef.current.estimateFaces(videoRef.current, { flipHorizontal: false });
 
@@ -104,20 +97,71 @@ export default function FaceLandmarksDetection() {
                 expressionCountRef.current[expression] = (expressionCountRef.current[expression] || 0) + 1;
             }
         });
-    }, !!(detectorRef.current && videoRef.current && ctx));
+    }, !!(detectorRef.current && videoRef.current && ctx && isRunning));
+
+    // 🟢 Fonction pour arrêter la vidéo
+    const stopVideo = () => {
+        setIsRunning(false);
+        if (videoRef.current) {
+            const tracks = (videoRef.current.srcObject as MediaStream)?.getTracks();
+            tracks?.forEach((track) => track.stop());
+        }
+
+        const mostFrequentExpression = Object.entries(expressionCountRef.current)
+            .sort((a, b) => b[1] - a[1])[0]?.[0] || "Aucune expression détectée";
+
+        setFeedback(`Expression la plus détectée : ${mostFrequentExpression}`);
+    };
 
     return (
         <div style={{ textAlign: "center" }}>
-            <canvas
+            {/* 🟢 Vidéo normale qui prend l'écran entier */}
+            <video
+                id="plain-video"
                 style={{
-                    transform: "scaleX(-1)",
-                    zIndex: 1,
+                    width: "100%",
+                    height: "auto",
                     borderRadius: "1rem",
                     boxShadow: "0 3px 10px rgb(0 0 0)",
-                    maxWidth: "85vw",
+                    objectFit: "cover",
+                }}
+                autoPlay
+                playsInline
+                ref={videoRef}
+            />
+
+            {/* 🟢 Canvas avec les traits et points dans le coin gauche */}
+            <canvas
+                style={{
+                    position: "absolute",
+                    top: "10px",
+                    left: "10px",
+                    width: "150px",
+                    height: "100px",
+                    transform: "scaleX(-1)",
+                    border: "2px solid white",
+                    borderRadius: "8px",
+                    zIndex: 1,
                 }}
                 id="canvas"
             />
+
+            {/* 🔹 Bouton pour arrêter la vidéo */}
+            <button
+                onClick={stopVideo}
+                style={{
+                    marginTop: "10px",
+                    padding: "10px",
+                    fontSize: "1rem",
+                    background: "#222",
+                    color: "#fff",
+                    borderRadius: "5px",
+                    border: "none",
+                }}
+            >
+                Arrêter la vidéo
+            </button>
+
             {/* 🔹 Affichage du feedback */}
             {feedback && (
                 <div
@@ -127,7 +171,6 @@ export default function FaceLandmarksDetection() {
                         color: "#fff",
                         padding: "10px",
                         borderRadius: "5px",
-                        maxWidth: "85vw",
                         fontSize: "1rem",
                         fontWeight: "bold",
                     }}
@@ -138,4 +181,5 @@ export default function FaceLandmarksDetection() {
         </div>
     );
 }
+
 
