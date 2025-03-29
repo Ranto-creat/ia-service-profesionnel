@@ -53,61 +53,79 @@ export default function Home() {
                     </motion.p>
 
                     {/* Cards */}
-                    <motion.div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl">
                         {/* Hard Skills */}
-                        <Link href="/hard">
-                            <Card className="group h-full cursor-pointer p-6 bg-white/5 hover:bg-white/10 border-white/10 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/20">
-                                <div className="flex flex-col items-center text-center gap-4">
-                                    <div className="p-4 rounded-full bg-purple-500/10 group-hover:bg-purple-500/20 transition-colors">
-                                        <Brain className="w-8 h-8 text-purple-400" />
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.2 }}
+                            className="flex flex-col items-center justify-center">
+                            <Link href="/hard">
+                                <Card className="group h-full cursor-pointer p-6 bg-white/5 hover:bg-white/10 border-white/10 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/20">
+                                    <div className="flex flex-col items-center text-center gap-4">
+                                        <div className="p-4 rounded-full bg-purple-500/10 group-hover:bg-purple-500/20 transition-colors">
+                                            <Brain className="w-8 h-8 text-purple-400" />
+                                        </div>
+                                        <h2 className="text-xl font-semibold text-white">
+                                            Trouver une formation
+                                        </h2>
+                                        <p className="text-white/60">
+                                            Explorez les meilleures formations
+                                            adaptées à vos besoins
+                                        </p>
                                     </div>
-                                    <h2 className="text-xl font-semibold text-white">
-                                        Trouver une formation
-                                    </h2>
-                                    <p className="text-white/60">
-                                        Explorez les meilleures formations
-                                        adaptées à vos besoins
-                                    </p>
-                                </div>
-                            </Card>
-                        </Link>
+                                </Card>
+                            </Link>
+                        </motion.div>
 
                         {/* Soft Skills */}
-                        <Link href="/soft">
-                            <Card className="group h-full cursor-pointer p-6 bg-white/5 hover:bg-white/10 border-white/10 transition-all duration-300 hover:shadow-2xl hover:shadow-yellow-500/20">
-                                <div className="flex flex-col items-center text-center gap-4">
-                                    <div className="p-4 rounded-full bg-yellow-500/10 group-hover:bg-yellow-500/20 transition-colors">
-                                        <MessageSquare className="w-8 h-8 text-yellow-400" />
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3 }}
+                            className="flex flex-col items-center justify-center">
+                            <Link href="/soft">
+                                <Card className="group h-full cursor-pointer p-6 bg-white/5 hover:bg-white/10 border-white/10 transition-all duration-300 hover:shadow-2xl hover:shadow-yellow-500/20">
+                                    <div className="flex flex-col items-center text-center gap-4">
+                                        <div className="p-4 rounded-full bg-yellow-500/10 group-hover:bg-yellow-500/20 transition-colors">
+                                            <MessageSquare className="w-8 h-8 text-yellow-400" />
+                                        </div>
+                                        <h2 className="text-xl font-semibold text-white">
+                                            Simuler un entretien
+                                        </h2>
+                                        <p className="text-white/60">
+                                            Pratiquez avec notre IA pour briller
+                                            en entretien.
+                                        </p>
                                     </div>
-                                    <h2 className="text-xl font-semibold text-white">
-                                        Simuler un entretien
-                                    </h2>
-                                    <p className="text-white/60">
-                                        Pratiquez avec notre IA pour briller en
-                                        entretien.
-                                    </p>
-                                </div>
-                            </Card>
-                        </Link>
+                                </Card>
+                            </Link>
+                        </motion.div>
 
                         {/* Chat */}
-                        <Link href="/chats">
-                            <Card className="group h-full cursor-pointer p-6 bg-white/5 hover:bg-white/10 border-white/10 transition-all duration-300 hover:shadow-2xl hover:shadow-pink-500/20">
-                                <div className="flex flex-col items-center text-center gap-4">
-                                    <div className="p-4 rounded-full bg-pink-500/10 group-hover:bg-pink-500/20 transition-colors">
-                                        <Sparkles className="w-8 h-8 text-pink-400" />
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.4 }}
+                            className="flex flex-col items-center justify-center">
+                            <Link href="/chats">
+                                <Card className="group h-full cursor-pointer p-6 bg-white/5 hover:bg-white/10 border-white/10 transition-all duration-300 hover:shadow-2xl hover:shadow-pink-500/20">
+                                    <div className="flex flex-col items-center text-center gap-4">
+                                        <div className="p-4 rounded-full bg-pink-500/10 group-hover:bg-pink-500/20 transition-colors">
+                                            <Sparkles className="w-8 h-8 text-pink-400" />
+                                        </div>
+                                        <h2 className="text-xl font-semibold text-white">
+                                            Posez vos questions
+                                        </h2>
+                                        <p className="text-white/60">
+                                            Discutez avec notre IA pour des
+                                            conseils personnalisés
+                                        </p>
                                     </div>
-                                    <h2 className="text-xl font-semibold text-white">
-                                        Posez vos questions
-                                    </h2>
-                                    <p className="text-white/60">
-                                        Discutez avec notre IA pour des conseils
-                                        personnalisés
-                                    </p>
-                                </div>
-                            </Card>
-                        </Link>
-                    </motion.div>
+                                </Card>
+                            </Link>
+                        </motion.div>
+                    </div>
                 </div>
 
                 {/* Chat input */}
