@@ -35,6 +35,10 @@ export default function FaceLandmarksDetection() {
         async function initialize() {
             try {
                 setLogs(["🚀 Initialisation en cours..."]);
+                
+                if (logs) {
+                    console.log(logs);
+                }
 
                 const video = document.createElement("video");
                 video.setAttribute("playsInline", "true");
