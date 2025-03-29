@@ -109,74 +109,39 @@ export default function FaceLandmarksDetection() {
     const lookAwayPercent = stats.total ? ((stats.lookAway / stats.total) * 100).toFixed(1) : "0";
 
     return (
-       <div style={{ textAlign: "center", position: "relative" }}>
-    {/* Première vidéo normale */}
-    <video
-        ref={videoRef}
-        style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            zIndex: 0, // La vidéo 1 est en arrière-plan
-            transform: "scaleX(1)", // Pas de miroir pour cette vidéo
-            width: "100%",
-            height: "100%",
-        }}
-        playsInline
-        autoPlay
-        muted
-    />
+        <div style={{ textAlign: "center" }}>
+            <canvas
+                style={{
+                    transform: "scaleX(-1)",
+                    zIndex: 1,
+                    borderRadius: "1rem",
+                    boxShadow: "0 3px 10px rgb(0 0 0)",
+                    maxWidth: "85vw",
+                }}
+                id="canvas"
+            />
+            
+            {/* 🔹 Section affichage des logs */}
+           
 
-    {/* Deuxième vidéo en miroir */}
-    <video
-        ref={videoRef}
-        style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            zIndex: 1, // La vidéo 2 est au-dessus de la première
-            transform: "scaleX(-1)", // Miroir horizontal pour la deuxième vidéo
-            width: "100%",
-            height: "100%",
-        }}
-        playsInline
-        autoPlay
-        muted
-    />
-
-    {/* Canvas superposé aux vidéos */}
-    <canvas
-        style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            zIndex: 2, // Le canvas est au-dessus des vidéos
-            width: "100%",
-            height: "100%",
-            borderRadius: "1rem",
-            boxShadow: "0 3px 10px rgb(0 0 0)",
-        }}
-        id="canvas"
-    />
-
-    {/* 🔹 Section affichage des logs */}
-    <div
-        style={{
-            marginTop: "1rem",
-            background: "#333",
-            color: "#fff",
-            padding: "10px",
-            borderRadius: "5px",
-            maxWidth: "85vw",
-            fontSize: "1rem",
-        }}
-    >
-        <p>📊 Statistiques :</p>
-        <p>😁 Sourire : {smilePercent}%</p>
-        <p>😐 Neutre : {neutralPercent}%</p>
-        <p>👀 Regard détourné : {lookAwayPercent}%</p>
-    </div>
-</div>
+            {/* 🔹 Affichage des statistiques en pourcentage */}
+            <div
+                style={{
+                    marginTop: "1rem",
+                    background: "#333",
+                    color: "#fff",
+                    padding: "10px",
+                    borderRadius: "5px",
+                    maxWidth: "85vw",
+                    fontSize: "1rem",
+                }}
+            >
+                <p>📊 Statistiques :</p>
+                <p>😁 Sourire : {smilePercent}%</p>
+                <p>😐 Neutre : {neutralPercent}%</p>
+                <p>👀 Regard détourné : {lookAwayPercent}%</p>
+            </div>
+        </div>
     );
 }
 
