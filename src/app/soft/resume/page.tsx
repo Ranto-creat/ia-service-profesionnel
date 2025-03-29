@@ -131,7 +131,7 @@ export default function AnalyseCV() {
                 </DialogTitle>
 
                 <DialogDescription>
-                  Voici les retours basés sur l’analyse de votre CV :
+                  Voici les retours basés sur l&apos;analyse de votre CV :
                 </DialogDescription>
               </DialogHeader>
 
