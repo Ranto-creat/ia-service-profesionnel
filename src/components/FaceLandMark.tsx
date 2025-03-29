@@ -112,7 +112,7 @@ export default function FaceLandmarksDetection() {
        <div style={{ textAlign: "center", position: "relative" }}>
     {/* Première vidéo normale */}
     <video
-        ref={videoRef1}
+        ref={videoRef}
         style={{
             position: "absolute",
             top: 0,
@@ -129,7 +129,7 @@ export default function FaceLandmarksDetection() {
 
     {/* Deuxième vidéo en miroir */}
     <video
-        ref={videoRef2}
+        ref={videoRef}
         style={{
             position: "absolute",
             top: 0,
