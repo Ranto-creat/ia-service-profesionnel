@@ -113,7 +113,7 @@ export default function AnalyseCV() {
                     Analyser mon CV
                 </Button>
 
-                {error && <p className="text-red-500 mt-4">{error}</p>}
+                {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
             </Card>
 
             {/* *** RESULTATS *** */}
