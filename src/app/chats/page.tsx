@@ -17,36 +17,43 @@ export default function ChatPage() {
     const [messages, setMessages] = useState<Message[]>([
         {
             role: 'ai',
-            content: 'Salut 👋 Je suis là pour répondre à toutes tes questions !',
+            content:
+                'Salut 👋 Je suis là pour répondre à toutes tes questions !',
         },
     ]);
     const [input, setInput] = useState('');
     const bottomRef = useRef<HTMLDivElement | null>(null);
 
     const fetchGeminiResponse = async (userMessage: string) => {
-        const apiKey = "AIzaSyCh2TED1wI00MMK5vmn5e4khNFXuO2kaPU"; 
+        const apiKey = 'AIzaSyCh2TED1wI00MMK5vmn5e4khNFXuO2kaPU';
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
         try {
             const response = await fetch(url, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    contents: [{ parts: [{ text: userMessage }] }]
-                })
+                    contents: [{ parts: [{ text: userMessage }] }],
+                }),
             });
 
             const data = await response.json();
-            return data?.candidates?.[0]?.content?.parts?.[0]?.text || "Je n'ai pas pu obtenir de réponse.";
+            return (
+                data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+                "Je n'ai pas pu obtenir de réponse."
+            );
         } catch (error) {
-            return "Erreur lors de la communication avec l'API."+error;
+            return "Erreur lors de la communication avec l'API." + error;
         }
     };
 
     const handleSend = async () => {
         if (!input.trim()) return;
 
-        const newMessages: Message[] = [...messages, { role: 'user', content: input }];
+        const newMessages: Message[] = [
+            ...messages,
+            { role: 'user', content: input },
+        ];
         setMessages(newMessages);
         setInput('');
 
@@ -82,12 +89,24 @@ export default function ChatPage() {
                 <span className="text-purple-400">Discutons !</span>
             </header>
 
-            <main className="flex-1 px-4 sm:px-6 lg:px-8 z-10 w-full max-w-4xl mx-auto">
+            {/* Chat content */}
+            <main className="flex-1 px-4 sm:px-6 lg:px-8 w-full max-w-4xl mx-auto">
                 <Card className="bg-white/5 p-4 h-full overflow-hidden shadow-lg border-white/10">
                     <ScrollArea className="h-[65vh] pr-4">
                         {messages.map((msg, index) => (
-                            <div key={index} className={`mb-4 flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                                <div className={`px-4 py-2 rounded-2xl max-w-[75%] text-sm sm:text-base ${msg.role === 'user' ? 'bg-purple-600 text-white' : 'bg-white text-black'}`}>
+                            <div
+                                key={index}
+                                className={`mb-4 flex ${
+                                    msg.role === 'user'
+                                        ? 'justify-end'
+                                        : 'justify-start'
+                                }`}>
+                                <div
+                                    className={`px-4 py-2 rounded-2xl max-w-[75%] text-sm sm:text-base ${
+                                        msg.role === 'user'
+                                            ? 'bg-purple-600 text-white'
+                                            : 'bg-white text-black'
+                                    }`}>
                                     {msg.content}
                                 </div>
                             </div>
@@ -97,7 +116,8 @@ export default function ChatPage() {
                 </Card>
             </main>
 
-            <footer className="w-full px-4 sm:px-6 lg:px-8 z-20 mb-8">
+            {/* Footer input (identique à la page d’accueil) */}
+            <footer className="w-full px-4 sm:px-6 lg:px-8 mb-22 md:mb-8">
                 <div className="max-w-4xl mx-auto">
                     <div className="relative w-full">
                         <Input
@@ -108,10 +128,16 @@ export default function ChatPage() {
                             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                         />
                         <div className="absolute inset-y-0 right-2 flex items-center gap-2">
-                            <Button variant="ghost" size="icon" className="hover:bg-white/10 rounded-full">
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="hover:bg-white/10 rounded-full">
                                 <ImagePlus className="w-5 h-5 text-white/60" />
                             </Button>
-                            <Button size="icon" onClick={handleSend} className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-full">
+                            <Button
+                                size="icon"
+                                onClick={handleSend}
+                                className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-full">
                                 <Send className="w-5 h-5 text-white" />
                             </Button>
                         </div>
