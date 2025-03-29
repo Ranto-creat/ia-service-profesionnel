@@ -4,14 +4,13 @@ import React, { MouseEventHandler, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import {
-   
     LogOut,
- 
     Plus,
     Home,
     Heart,
     BookOpen,
     Speech,
+    MessagesSquare,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
