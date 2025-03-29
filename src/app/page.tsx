@@ -53,7 +53,7 @@ export default function Home() {
                     </motion.p>
 
                     {/* Cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl">
+                    <motion.div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl">
                         {/* Hard Skills */}
                         <Link href="/hard">
                             <Card className="group h-full cursor-pointer p-6 bg-white/5 hover:bg-white/10 border-white/10 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/20">
@@ -107,7 +107,7 @@ export default function Home() {
                                 </div>
                             </Card>
                         </Link>
-                    </div>
+                    </motion.div>
                 </div>
 
                 {/* Chat input */}
