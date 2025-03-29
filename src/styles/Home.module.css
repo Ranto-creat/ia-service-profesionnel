@@ -129,6 +129,6 @@
 }
 
 .bg_soft {
-    background: url('/public/assets/card.png') no-repeat center center;
+    background: url('/public/assets/card.png') no-repeat center cen0ter;
     background-size: contain;
 }

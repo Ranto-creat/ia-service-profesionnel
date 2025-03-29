@@ -128,7 +128,7 @@ export function AILoader({
                     {message}
                     {dots}
                 </h3>
-                <p className="text-sm text-muted-foreground animate-pulse">
+                <p className="text-sm text-neutral-200 animate-pulse">
                     Cela peut prendre quelques secondes
                 </p>
             </div>
@@ -136,7 +136,7 @@ export function AILoader({
             {/* Barre de progression */}
             <div className="w-64 h-1.5 bg-secondary/10 rounded-full overflow-hidden">
                 <div
-                    className="h-full bg-gradient-to-r from-secondary to-emerald-400 rounded-full"
+                    className="h-full bg-gradient-to-r from-secondary to-purple-400 rounded-full"
                     style={{
                         animation:
                             'progressBar 2.5s ease-in-out infinite alternate',

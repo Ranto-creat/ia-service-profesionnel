@@ -12,7 +12,10 @@ export default function SoftPage() {
         <div
             className={`relative min-h-screen flex items-center justify-center text-white px-4 overflow-hidden ${style.bg_soft}`}>
             <div className="max-w-4xl w-full text-center space-y-8">
-                <div>
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}>
                     <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight mb-4">
                         Soft Skills
                     </h1>
@@ -20,7 +23,7 @@ export default function SoftPage() {
                         Améliorez vos compétences interpersonnelles et augmentez
                         vos chances de succès dans le monde professionnel.
                     </p>
-                </div>
+                </motion.div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-10">
                     {/* Entretien */}
