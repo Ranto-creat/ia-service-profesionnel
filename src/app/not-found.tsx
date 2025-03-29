@@ -40,8 +40,7 @@ export default function NotFound() {
           </h2>
 
           <p className="mt-4 text-gray-500">
-            Désolé, la page que vous recherchez n&apos;existe pas ou a été
-            déplacée.
+            Désolé, la page que vous recherchez n&apos;existe pas ou a été déplacée.
           </p>
 
           <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">

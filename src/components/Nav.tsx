@@ -4,16 +4,13 @@ import React, { MouseEventHandler, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import {
-    DollarSign,
-    ArrowLeftRight,
     LogOut,
-    MessagesSquare,
-    TrendingUp,
     Plus,
     Home,
     Heart,
     BookOpen,
     Speech,
+    MessagesSquare,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -36,6 +33,11 @@ export default function Nav() {
                         <NavItem link={'/hard'} Icon={<BookOpen size={20} />} />
 
                         <NavItem link={'/soft'} Icon={<Speech size={20} />} />
+
+                        <NavItem
+                            link={'/chats'}
+                            Icon={<MessagesSquare size={20} />}
+                        />
                     </div>
 
                     <div>
@@ -60,6 +62,7 @@ function NavItem({ Icon, link }: INavItem) {
     const pathname = usePathname();
 
     useEffect(() => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         pathname.endsWith(link) ? setIsVisited(true) : setIsVisited(false);
     }, [link, pathname]);
 
@@ -115,6 +118,10 @@ const MobileNavigation = () => {
                     <NavItem link={'/'} Icon={<Home size={20} />} />
                     <NavItem link={'/hard'} Icon={<BookOpen size={20} />} />
                     <NavItem link={'/soft'} Icon={<Speech size={20} />} />
+                    <NavItem
+                        link={'/chats'}
+                        Icon={<MessagesSquare size={20} />}
+                    />
                 </div>
                 <div className="mt-auto border-y">
                     <div className="flex cursor-pointer items-center gap-4 border-l-4 border-transparent p-4 text-sm hover:border-neutral-800 hover:bg-white">

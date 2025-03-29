@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from "react";
+import React, { /*MouseEventHandler*/ useEffect, useState } from "react";
 
 import './globals.css';
 

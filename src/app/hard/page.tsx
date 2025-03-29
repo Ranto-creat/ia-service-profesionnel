@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { Search, MapPin} from 'lucide-react';
+import {  useState } from 'react';
+import { Search,  MapPin} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { CourseCard } from '@/components/CardComponent';
@@ -18,6 +18,7 @@ interface Course {
 }
 
 function HardSkill() {
+  //  const [selectedProfession, setSelectedProfession] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     const [showLocalCourses, setShowLocalCourses] = useState(false);
     const [searchResults, setSearchResults] = useState<Course[]>([]); 
@@ -68,6 +69,7 @@ function HardSkill() {
             const response = await fetch(apiUrl);
             const data = await response.json();
 
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const coursesFromApi = data.results.map((result: any) => ({
                 id: result.title, 
                 title: result.title,

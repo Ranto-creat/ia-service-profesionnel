@@ -1,12 +1,12 @@
 'use client';
 
-import { Canvas, useThree } from '@react-three/fiber';
+import { Canvas } from '@react-three/fiber';
 import Model from './model';
 import { Suspense } from 'react';
 import { useProgress, Html, ScrollControls } from '@react-three/drei';
 
 function Loader() {
-    const { progress, active } = useProgress();
+    const { progress} = useProgress();
 
     return <Html center>{progress.toFixed(1)} % loaded</Html>;
 }

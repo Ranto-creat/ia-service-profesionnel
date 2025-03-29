@@ -43,7 +43,9 @@ export default function AnalyseCV() {
             const data = await res.json();
             setResult(data.suggestions);
         } catch (err) {
-            setError("Impossible d'analyser le CV. Vérifiez votre connexion et réessayez.");
+            setError(
+                "Impossible d'analyser le CV. Vérifiez votre connexion et réessayez."+err
+            );
         } finally {
             setUploading(false);
             setProgress(100);
