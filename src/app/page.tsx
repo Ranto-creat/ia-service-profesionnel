@@ -119,7 +119,7 @@ export default function Home() {
                                         </h2>
                                         <p className="text-white/60">
                                             Discutez avec notre IA pour des
-                                            conseils personnalisés
+                                            conseils personnalisés.
                                         </p>
                                     </div>
                                 </Card>
