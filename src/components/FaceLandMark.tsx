@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import { useEffect, useRef, useState } from "react";
 import { useAnimationFrame } from "../lib/hooks/useAnimationFrame";
 import "@tensorflow/tfjs-backend-webgl";
@@ -10,55 +10,21 @@ import { detectExpression } from "./FaceExpression";
 
 tfjsWasm.setWasmPaths("https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-wasm");
 
-// 🟢 Fonction pour configurer le détecteur de visages
-async function setupDetector(): Promise<faceLandmarksDetection.FaceLandmarksDetector> {
-    const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
-    return faceLandmarksDetection.createDetector(model, {
-        runtime: "mediapipe",
-        solutionPath: `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@${faceMesh.VERSION}`,
-        maxFaces: 2,
-        refineLandmarks: true,
-    });
-}
+type Stats = {
+    smile: number;
+    neutral: number;
+    lookAway: number;
+    total: number;
+};
 
-// 🟢 Fonction pour configurer la vidéo
-async function setupVideo(): Promise<HTMLVideoElement> {
-    const video = document.createElement("video");
-    video.setAttribute("id", "video");
-    video.setAttribute("playsInline", "true");
-
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-
-    video.srcObject = stream;
-
-    await new Promise<void>((resolve) => {
-        video.onloadedmetadata = () => resolve();
-    });
-
-    video.play();
-
-    return video;
-}
-
-// 🟢 Fonction pour configurer le canvas
-async function setupCanvas(video: HTMLVideoElement): Promise<CanvasRenderingContext2D> {
-    const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-    const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
-
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-
-    return ctx;
-}
-
-// 🔵 Composant principal
 export default function FaceLandmarksDetection() {
     const detectorRef = useRef<faceLandmarksDetection.FaceLandmarksDetector | null>(null);
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
-    const expressionCountRef = useRef<{ [expression: string]: number }>({});
-    const [feedback, setFeedback] = useState<string | null>(null);
-    const [isRunning, setIsRunning] = useState<boolean>(true);
+    const [logs, setLogs] = useState<string[]>([]);
+    const [stats, setStats] = useState<Stats>({ smile: 0, neutral: 0, lookAway: 0, total: 0 });
+    const [isVideoStopped, setIsVideoStopped] = useState(false); // State to track video stop
+    const streamRef = useRef<MediaStream | null>(null); // Ref to store video stream
 
     const contours = faceLandmarksDetection.util.getKeypointIndexByContour(
         faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh
@@ -67,16 +33,42 @@ export default function FaceLandmarksDetection() {
     useEffect(() => {
         async function initialize() {
             try {
-                const video = await setupVideo();
-                document.body.appendChild(video);
+                setLogs(["🚀 Initialisation en cours..."]);
+                
+                const video = document.createElement("video");
+                video.setAttribute("playsInline", "true");
+
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                streamRef.current = stream; // Store the stream in the ref
+
+                video.srcObject = stream;
+                await new Promise<void>((resolve) => (video.onloadedmetadata = () => resolve()));
+                video.play();
+
+                document.body.appendChild(video); // Add video to DOM
                 videoRef.current = video;
+                if(logs){
+                    console.log("videoRef.current", videoRef.current);
+                }
+                const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+                const context = canvas.getContext("2d") as CanvasRenderingContext2D;
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
 
-                const context = await setupCanvas(video);
                 setCtx(context);
+                detectorRef.current = await faceLandmarksDetection.createDetector(
+                    faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh,
+                    {
+                        runtime: "mediapipe",
+                        solutionPath: `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@${faceMesh.VERSION}`,
+                        maxFaces: 2,
+                        refineLandmarks: true,
+                    }
+                );
 
-                detectorRef.current = await setupDetector();
+                setLogs((prev) => [...prev, "✅ Détecteur de visages prêt !"]);
             } catch (error) {
-                console.error("Erreur :", error);
+                setLogs((prev) => [...prev, `❌ Erreur: ${error instanceof Error ? error.message : "Erreur inconnue"}`]);
             }
         }
 
@@ -84,7 +76,7 @@ export default function FaceLandmarksDetection() {
     }, []);
 
     useAnimationFrame(async () => {
-        if (!detectorRef.current || !videoRef.current || !ctx || !isRunning) return;
+        if (!detectorRef.current || !videoRef.current || !ctx || isVideoStopped) return;
 
         const faces = await detectorRef.current.estimateFaces(videoRef.current, { flipHorizontal: false });
 
@@ -92,94 +84,84 @@ export default function FaceLandmarksDetection() {
         ctx.drawImage(videoRef.current, 0, 0, videoRef.current.videoWidth, videoRef.current.videoHeight);
         drawFaces(faces, ctx, contours);
 
-        detectExpression(faces, (expression) => {
-            if (expression) {
-                expressionCountRef.current[expression] = (expressionCountRef.current[expression] || 0) + 1;
-            }
-        });
-    }, !!(detectorRef.current && videoRef.current && ctx && isRunning));
+        detectExpression(faces, (msg) => {
+            setLogs((prev) => [...prev, msg]);
 
-    // 🟢 Fonction pour arrêter la vidéo
+            setStats((prev) => {
+                let smile = prev.smile;
+                let neutral = prev.neutral;
+                let lookAway = prev.lookAway;
+
+                if (msg.includes("😁")) smile++;
+                else if (msg.includes("😐")) neutral++;
+                else if (msg.includes("👀")) lookAway++;
+
+                return { smile, neutral, lookAway, total: prev.total + 1 };
+            });
+        });
+    }, !!(detectorRef.current && videoRef.current && ctx && !isVideoStopped));
+
+    // 🟢 Function to stop the video stream
     const stopVideo = () => {
-        setIsRunning(false);
-        if (videoRef.current) {
-            const tracks = (videoRef.current.srcObject as MediaStream)?.getTracks();
-            tracks?.forEach((track) => track.stop());
+        if (streamRef.current) {
+            const tracks = streamRef.current.getTracks();
+            tracks.forEach((track) => track.stop()); // Stop all video tracks
         }
 
-        const mostFrequentExpression = Object.entries(expressionCountRef.current)
-            .sort((a, b) => b[1] - a[1])[0]?.[0] || "Aucune expression détectée";
-
-        setFeedback(`Expression la plus détectée : ${mostFrequentExpression}`);
+        setIsVideoStopped(true); // Set the state to stop further video actions
     };
+
+    // 🟢 Calcul des pourcentages
+    const smilePercent = stats.total ? ((stats.smile / stats.total) * 100).toFixed(1) : "0";
+    const neutralPercent = stats.total ? ((stats.neutral / stats.total) * 100).toFixed(1) : "0";
+    const lookAwayPercent = stats.total ? ((stats.lookAway / stats.total) * 100).toFixed(1) : "0";
 
     return (
         <div style={{ textAlign: "center" }}>
-            {/* 🟢 Vidéo normale qui prend l'écran entier */}
-            <video
-                id="plain-video"
-                style={{
-                    width: "100%",
-                    height: "auto",
-                    borderRadius: "1rem",
-                    boxShadow: "0 3px 10px rgb(0 0 0)",
-                    objectFit: "cover",
-                }}
-                autoPlay
-                playsInline
-                ref={videoRef}
-            />
-
-            {/* 🟢 Canvas avec les traits et points dans le coin gauche */}
             <canvas
                 style={{
-                    position: "absolute",
-                    top: "10px",
-                    left: "10px",
-                    width: "150px",
-                    height: "100px",
                     transform: "scaleX(-1)",
-                    border: "2px solid white",
-                    borderRadius: "8px",
                     zIndex: 1,
+                    borderRadius: "1rem",
+                    boxShadow: "0 3px 10px rgb(0 0 0)",
+                    maxWidth: "85vw",
                 }}
                 id="canvas"
             />
+            
+            {/* 🔹 Affichage des statistiques en pourcentage */}
+            <div
+                style={{
+                    marginTop: "1rem",
+                    background: "#333",
+                    color: "#fff",
+                    padding: "10px",
+                    borderRadius: "5px",
+                    maxWidth: "85vw",
+                    fontSize: "1rem",
+                }}
+            >
+                <p>📊 Statistiques :</p>
+                <p>😁 Sourire : {smilePercent}%</p>
+                <p>😐 Neutre : {neutralPercent}%</p>
+                <p>👀 Regard détourné : {lookAwayPercent}%</p>
+            </div>
 
-            {/* 🔹 Bouton pour arrêter la vidéo */}
+            {/* Stop Video Button */}
             <button
                 onClick={stopVideo}
                 style={{
-                    marginTop: "10px",
-                    padding: "10px",
-                    fontSize: "1rem",
-                    background: "#222",
-                    color: "#fff",
+                    marginTop: "1rem",
+                    background: "#f44336",
+                    color: "white",
+                    padding: "10px 20px",
                     borderRadius: "5px",
-                    border: "none",
+                    cursor: "pointer",
+                    fontSize: "1rem",
                 }}
             >
-                Arrêter la vidéo
+                Stop Video
             </button>
-
-            {/* 🔹 Affichage du feedback */}
-            {feedback && (
-                <div
-                    style={{
-                        marginTop: "1rem",
-                        background: "#222",
-                        color: "#fff",
-                        padding: "10px",
-                        borderRadius: "5px",
-                        fontSize: "1rem",
-                        fontWeight: "bold",
-                    }}
-                >
-                    {feedback}
-                </div>
-            )}
         </div>
     );
 }
-
-
