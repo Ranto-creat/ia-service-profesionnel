@@ -1,4 +1,4 @@
-"use client"
+'use client';
 import { useEffect, useRef, useState } from "react";
 import { useAnimationFrame } from "../lib/hooks/useAnimationFrame";
 import "@tensorflow/tfjs-backend-webgl";
@@ -10,7 +10,6 @@ import { detectExpression } from "./FaceExpression";
 
 tfjsWasm.setWasmPaths("https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-wasm");
 
-// 🟢 Définition du type de statistiques
 type Stats = {
     smile: number;
     neutral: number;
@@ -23,32 +22,32 @@ export default function FaceLandmarksDetection() {
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
     const [logs, setLogs] = useState<string[]>([]);
-    
-    // 🟢 État pour stocker les statistiques
     const [stats, setStats] = useState<Stats>({ smile: 0, neutral: 0, lookAway: 0, total: 0 });
+    const [isVideoStopped, setIsVideoStopped] = useState(false);
+    const [feedback, setFeedback] = useState<string>("");
+    const streamRef = useRef<MediaStream | null>(null);
 
     const contours = faceLandmarksDetection.util.getKeypointIndexByContour(
         faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh
     );
+console.log(logs);
 
     useEffect(() => {
         async function initialize() {
             try {
                 setLogs(["🚀 Initialisation en cours..."]);
                 
-                if (logs) {
-                    console.log(logs);
-                }
-
                 const video = document.createElement("video");
                 video.setAttribute("playsInline", "true");
+
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                streamRef.current = stream;
 
                 video.srcObject = stream;
                 await new Promise<void>((resolve) => (video.onloadedmetadata = () => resolve()));
                 video.play();
 
-                document.body.appendChild(video); // Ajout au DOM
+                document.body.appendChild(video);
                 videoRef.current = video;
 
                 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
@@ -77,7 +76,7 @@ export default function FaceLandmarksDetection() {
     }, []);
 
     useAnimationFrame(async () => {
-        if (!detectorRef.current || !videoRef.current || !ctx) return;
+        if (!detectorRef.current || !videoRef.current || !ctx || isVideoStopped) return;
 
         const faces = await detectorRef.current.estimateFaces(videoRef.current, { flipHorizontal: false });
 
@@ -85,7 +84,6 @@ export default function FaceLandmarksDetection() {
         ctx.drawImage(videoRef.current, 0, 0, videoRef.current.videoWidth, videoRef.current.videoHeight);
         drawFaces(faces, ctx, contours);
 
-        // 🟢 Détection des expressions et mise à jour des statistiques
         detectExpression(faces, (msg) => {
             setLogs((prev) => [...prev, msg]);
 
@@ -101,12 +99,26 @@ export default function FaceLandmarksDetection() {
                 return { smile, neutral, lookAway, total: prev.total + 1 };
             });
         });
-    }, !!(detectorRef.current && videoRef.current && ctx));
+    }, !!(detectorRef.current && videoRef.current && ctx && !isVideoStopped));
 
-    // 🟢 Calcul des pourcentages
-    const smilePercent = stats.total ? ((stats.smile / stats.total) * 100).toFixed(1) : "0";
-    const neutralPercent = stats.total ? ((stats.neutral / stats.total) * 100).toFixed(1) : "0";
-    const lookAwayPercent = stats.total ? ((stats.lookAway / stats.total) * 100).toFixed(1) : "0";
+    const stopVideo = () => {
+        if (streamRef.current) {
+            const tracks = streamRef.current.getTracks();
+            tracks.forEach((track) => track.stop());
+        }
+        setIsVideoStopped(true);
+
+        if (stats.total > 0) {
+            const smilePercent = (stats.smile / stats.total) * 100;
+            const neutralPercent = (stats.neutral / stats.total) * 100;
+            const lookAwayPercent = (stats.lookAway / stats.total) * 100;
+
+            if (smilePercent > 50) setFeedback("😊 Vous avez beaucoup souri ! Continuez ainsi !");
+            else if (neutralPercent > 50) setFeedback("😐 Vous êtes resté neutre la plupart du temps.");
+            else if (lookAwayPercent > 50) setFeedback("👀 Vous avez souvent détourné le regard. Essayez de maintenir plus de contact visuel !");
+            else setFeedback("🤔 Analyse mixte, essayez de varier vos expressions !");
+        }
+    };
 
     return (
         <div style={{ textAlign: "center" }}>
@@ -120,11 +132,6 @@ export default function FaceLandmarksDetection() {
                 }}
                 id="canvas"
             />
-            
-            {/* 🔹 Section affichage des logs */}
-           
-
-            {/* 🔹 Affichage des statistiques en pourcentage */}
             <div
                 style={{
                     marginTop: "1rem",
@@ -137,11 +144,14 @@ export default function FaceLandmarksDetection() {
                 }}
             >
                 <p>📊 Statistiques :</p>
-                <p>😁 Sourire : {smilePercent}%</p>
-                <p>😐 Neutre : {neutralPercent}%</p>
-                <p>👀 Regard détourné : {lookAwayPercent}%</p>
+                <p>😁 Sourire : {((stats.smile / stats.total) * 100).toFixed(1) || "0"}%</p>
+                <p>😐 Neutre : {((stats.neutral / stats.total) * 100).toFixed(1) || "0"}%</p>
+                <p>👀 Regard détourné : {((stats.lookAway / stats.total) * 100).toFixed(1) || "0"}%</p>
             </div>
+            {isVideoStopped && feedback && (
+                <p style={{ marginTop: "1rem", color: "#fff", background: "#444", padding: "10px", borderRadius: "5px" }}>{feedback}</p>
+            )}
+            <button onClick={stopVideo} style={{ marginTop: "1rem", background: "#f44336", color: "white", padding: "10px 20px", borderRadius: "5px", cursor: "pointer", fontSize: "1rem" }}>Stop Video</button>
         </div>
     );
 }
-
