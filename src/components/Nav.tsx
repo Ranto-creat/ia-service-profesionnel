@@ -71,7 +71,7 @@ function NavItem({ Icon, link }: INavItem) {
             href={link}
             className={`flex cursor-pointer items-center gap-4 border-l-4 p-4 text-sm text-neutral-500  md:text-white  hover:text-purple-400 ${
                 isVisited
-                    ? 'md:border-neutral-800 text-purple-400'
+                    ? 'text-purple-400 md:border-purple-600'
                     : 'md:border-transparent'
             }`}>
             {Icon}
