@@ -39,7 +39,7 @@ export default function ChatPage() {
             const data = await response.json();
             return data?.candidates?.[0]?.content?.parts?.[0]?.text || "Je n'ai pas pu obtenir de réponse.";
         } catch (error) {
-            return "Erreur lors de la communication avec l'API.";
+            return "Erreur lors de la communication avec l'API."+error;
         }
     };
 
