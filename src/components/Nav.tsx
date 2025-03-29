@@ -4,9 +4,7 @@ import React, { MouseEventHandler, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import {
-   
     LogOut,
- 
     Plus,
     Home,
     Heart,

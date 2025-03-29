@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Send, ImagePlus } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 type Message = {
     role: 'user' | 'ai';
@@ -58,14 +59,23 @@ export default function ChatPage() {
             </div>
 
             {/* Header */}
-            <header className="z-10 p-6 text-center text-3xl font-bold">
-                🤖 Ask <span className="text-purple-400">Anything</span>
+            <header className="z-10 p-6 text-center text-3xl space-x-0.5 font-bold flex not-visited:flex-col items-center justify-center">
+                {/* <span className="py-1 animate-pulse">🤖</span> */}
+
+                <motion.span
+                    className="py-1 inline-block"
+                    animate={{ y: [0, -8, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}>
+                    🤖
+                </motion.span>
+
+                <span className="text-purple-400">Discutons !</span>
             </header>
 
             {/* Chat content */}
-            <main className="flex-1 px-4 sm:px-6 lg:px-8 pb-36 z-10 w-full max-w-4xl mx-auto">
+            <main className="flex-1 px-4 sm:px-6 lg:px-8 z-10 w-full max-w-4xl mx-auto">
                 <Card className="bg-white/5 p-4 h-full overflow-hidden shadow-lg border-white/10">
-                    <ScrollArea className="h-[60vh] pr-4">
+                    <ScrollArea className="h-[65vh] pr-4">
                         {messages.map((msg, index) => (
                             <div
                                 key={index}
