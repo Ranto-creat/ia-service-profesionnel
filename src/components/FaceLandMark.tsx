@@ -23,12 +23,14 @@ export default function FaceLandmarksDetection() {
     const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
     const [logs, setLogs] = useState<string[]>([]);
     const [stats, setStats] = useState<Stats>({ smile: 0, neutral: 0, lookAway: 0, total: 0 });
-    const [isVideoStopped, setIsVideoStopped] = useState(false); // State to track video stop
-    const streamRef = useRef<MediaStream | null>(null); // Ref to store video stream
+    const [isVideoStopped, setIsVideoStopped] = useState(false);
+    const [feedback, setFeedback] = useState<string>("");
+    const streamRef = useRef<MediaStream | null>(null);
 
     const contours = faceLandmarksDetection.util.getKeypointIndexByContour(
         faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh
     );
+console.log(logs);
 
     useEffect(() => {
         async function initialize() {
@@ -39,17 +41,15 @@ export default function FaceLandmarksDetection() {
                 video.setAttribute("playsInline", "true");
 
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                streamRef.current = stream; // Store the stream in the ref
+                streamRef.current = stream;
 
                 video.srcObject = stream;
                 await new Promise<void>((resolve) => (video.onloadedmetadata = () => resolve()));
                 video.play();
 
-                document.body.appendChild(video); // Add video to DOM
+                document.body.appendChild(video);
                 videoRef.current = video;
-                if(logs){
-                    console.log("videoRef.current", videoRef.current);
-                }
+
                 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
                 const context = canvas.getContext("2d") as CanvasRenderingContext2D;
                 canvas.width = video.videoWidth;
@@ -101,20 +101,24 @@ export default function FaceLandmarksDetection() {
         });
     }, !!(detectorRef.current && videoRef.current && ctx && !isVideoStopped));
 
-    // 🟢 Function to stop the video stream
     const stopVideo = () => {
         if (streamRef.current) {
             const tracks = streamRef.current.getTracks();
-            tracks.forEach((track) => track.stop()); // Stop all video tracks
+            tracks.forEach((track) => track.stop());
         }
+        setIsVideoStopped(true);
 
-        setIsVideoStopped(true); // Set the state to stop further video actions
+        if (stats.total > 0) {
+            const smilePercent = (stats.smile / stats.total) * 100;
+            const neutralPercent = (stats.neutral / stats.total) * 100;
+            const lookAwayPercent = (stats.lookAway / stats.total) * 100;
+
+            if (smilePercent > 50) setFeedback("😊 Vous avez beaucoup souri ! Continuez ainsi !");
+            else if (neutralPercent > 50) setFeedback("😐 Vous êtes resté neutre la plupart du temps.");
+            else if (lookAwayPercent > 50) setFeedback("👀 Vous avez souvent détourné le regard. Essayez de maintenir plus de contact visuel !");
+            else setFeedback("🤔 Analyse mixte, essayez de varier vos expressions !");
+        }
     };
-
-    // 🟢 Calcul des pourcentages
-    const smilePercent = stats.total ? ((stats.smile / stats.total) * 100).toFixed(1) : "0";
-    const neutralPercent = stats.total ? ((stats.neutral / stats.total) * 100).toFixed(1) : "0";
-    const lookAwayPercent = stats.total ? ((stats.lookAway / stats.total) * 100).toFixed(1) : "0";
 
     return (
         <div style={{ textAlign: "center" }}>
@@ -128,8 +132,6 @@ export default function FaceLandmarksDetection() {
                 }}
                 id="canvas"
             />
-            
-            {/* 🔹 Affichage des statistiques en pourcentage */}
             <div
                 style={{
                     marginTop: "1rem",
@@ -142,26 +144,14 @@ export default function FaceLandmarksDetection() {
                 }}
             >
                 <p>📊 Statistiques :</p>
-                <p>😁 Sourire : {smilePercent}%</p>
-                <p>😐 Neutre : {neutralPercent}%</p>
-                <p>👀 Regard détourné : {lookAwayPercent}%</p>
+                <p>😁 Sourire : {((stats.smile / stats.total) * 100).toFixed(1) || "0"}%</p>
+                <p>😐 Neutre : {((stats.neutral / stats.total) * 100).toFixed(1) || "0"}%</p>
+                <p>👀 Regard détourné : {((stats.lookAway / stats.total) * 100).toFixed(1) || "0"}%</p>
             </div>
-
-            {/* Stop Video Button */}
-            <button
-                onClick={stopVideo}
-                style={{
-                    marginTop: "1rem",
-                    background: "#f44336",
-                    color: "white",
-                    padding: "10px 20px",
-                    borderRadius: "5px",
-                    cursor: "pointer",
-                    fontSize: "1rem",
-                }}
-            >
-                Stop Video
-            </button>
+            {isVideoStopped && feedback && (
+                <p style={{ marginTop: "1rem", color: "#fff", background: "#444", padding: "10px", borderRadius: "5px" }}>{feedback}</p>
+            )}
+            <button onClick={stopVideo} style={{ marginTop: "1rem", background: "#f44336", color: "white", padding: "10px 20px", borderRadius: "5px", cursor: "pointer", fontSize: "1rem" }}>Stop Video</button>
         </div>
     );
 }
