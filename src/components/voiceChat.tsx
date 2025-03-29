@@ -1,3 +1,4 @@
+"use client"
 import React, { useState, useEffect } from "react";
 import { Mic, MicOff, Loader2, MessageSquare, Volume2, NotebookText, Clock, CheckCircle } from "lucide-react";
 
@@ -9,7 +10,7 @@ function InterviewSimulator() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [interviewPhase, setInterviewPhase] = useState<number>(0);
   const [feedback, setFeedback] = useState<string>("");
-  const [questions, setQuestions] = useState<string[]>([
+  const [questions] = useState<string[]>([
     "Pouvez-vous vous présenter brièvement ?",
     "Quelles sont vos principales compétences pour ce poste ?",
     "Quel est votre plus grand défi professionnel auquel vous avez fait face ?",
@@ -19,6 +20,7 @@ function InterviewSimulator() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const [interviewTime, setInterviewTime] = useState<number>(0);
 
+  // Timer pour l'entretien
   useEffect(() => {
     const timer = setInterval(() => {
       setInterviewTime(prev => prev + 1);
@@ -40,7 +42,7 @@ function InterviewSimulator() {
       };
 
       recognitionInstance.onerror = (event: SpeechRecognitionErrorEvent) => {
-        console.log("Veuillez réessayer");
+        console.log("Veuillez réessayer",event.error);
       };
 
       recognitionInstance.onend = () => setIsListening(false);
@@ -49,12 +51,14 @@ function InterviewSimulator() {
     } else {
       console.error("La reconnaissance vocale n'est pas supportée par votre navigateur.");
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const startListening = () => {
     if (recognition) {
       setIsListening(true);
       recognition.start();
+      // Si c'est le début de l'entretien, poser la première question
       if (interviewPhase === 0) {
         setInterviewPhase(1);
         speakReply(`Commenceçons l'entretien. ${questions[currentQuestionIndex]}`);
@@ -68,6 +72,7 @@ function InterviewSimulator() {
     setIsLoading(true);
     
     try {
+      // Analyse la réponse du candidat et donne un feedback
       const prompt = `En tant qu'expert en recrutement, analysez cette réponse à la question "${questions[currentQuestionIndex]}":
       
       Réponse du candidat: "${text}"
@@ -99,17 +104,19 @@ function InterviewSimulator() {
         const data = await res.json();
         const replyText = data.choices?.[0]?.message?.content || "Pas de réponse.";
         
+        // Extraire les différentes parties de la réponse
         const feedbackMatch = replyText.match(/Feedback: (.*?)(\n|$)/);
-        const noteMatch = replyText.match(/Note: (.*?)(\n|$)/);
+       // const noteMatch = replyText.match(/Note: (.*?)(\n|$)/);
         const nextMatch = replyText.match(/Suite: (.*?)(\n|$)/);
         
         setFeedback(feedbackMatch ? feedbackMatch[1] : "");
         setReply(nextMatch ? nextMatch[1] : "");
         
+        // Passer à la question suivante ou terminer l'entretien
         if (currentQuestionIndex < questions.length - 1) {
           setCurrentQuestionIndex(prev => prev + 1);
         } else {
-          setInterviewPhase(2);
+          setInterviewPhase(2); // Phase de conclusion
         }
         
         speakReply(`${feedbackMatch ? feedbackMatch[1] + " " : ""} ${nextMatch ? nextMatch[1] : ""}`);
@@ -134,65 +141,64 @@ function InterviewSimulator() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-blue-50 to-purple-50 p-8">
-      <div className="max-w-3xl mx-auto">
-        <div className="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-8 border border-white/20">
-          <h1 className="text-4xl font-bold text-center mb-8 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            Simulateur d'Entretien
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 p-6">
+      <div className="max-w-2xl mx-auto">
+        <div className="bg-white rounded-2xl shadow-xl p-8">
+          <h1 className="text-3xl font-bold text-center mb-4 text-blue-800">
+            Simulateur d&lsquo;Entretien
           </h1>
           
-          <div className="flex justify-between items-center mb-8 bg-white/50 rounded-2xl p-4 shadow-inner">
-            <div className="flex items-center gap-3 text-indigo-700">
-              <Clock className="w-6 h-6" />
-              <span className="font-semibold">{formatTime(interviewTime)}</span>
+          <div className="flex justify-between items-center mb-6">
+            <div className="flex items-center gap-2 text-blue-600">
+              <Clock className="w-5 h-5" />
+              <span>Temps: {formatTime(interviewTime)}</span>
             </div>
-            <div className="flex items-center gap-3 text-indigo-700">
-              <NotebookText className="w-6 h-6" />
-              <span className="font-semibold">Question {currentQuestionIndex + 1}/{questions.length}</span>
+            <div className="flex items-center gap-2 text-blue-600">
+              <NotebookText className="w-5 h-5" />
+              <span>Question {currentQuestionIndex + 1}/{questions.length}</span>
             </div>
           </div>
 
           {interviewPhase === 0 && (
-            <div className="bg-gradient-to-r from-blue-100 to-purple-100 rounded-2xl p-8 text-center mb-8 shadow-inner">
-              <h2 className="text-2xl font-bold mb-4 text-indigo-800">Prêt pour votre entretien ?</h2>
-              <p className="mb-4 text-lg text-indigo-700">Vous allez répondre à {questions.length} questions typiques d'entretien.</p>
-              <p className="text-indigo-600">Cliquez sur le bouton pour commencer.</p>
+            <div className="bg-blue-50 rounded-lg p-6 text-center mb-6">
+              <h2 className="text-xl font-semibold mb-4">Prêt pour votre entretien ?</h2>
+              <p className="mb-4">Vous allez répondre à {questions.length} questions typiques d&lsquo;entretien.</p>
+              <p className="text-sm text-gray-600">Cliquez sur le bouton pour commencer.</p>
             </div>
           )}
 
           {interviewPhase === 2 && (
-            <div className="bg-gradient-to-r from-green-100 to-emerald-100 rounded-2xl p-8 text-center mb-8 shadow-inner">
-              <CheckCircle className="w-16 h-16 mx-auto text-green-500 mb-6" />
-              <h2 className="text-2xl font-bold mb-3 text-green-800">Entretien terminé !</h2>
-              <p className="mb-3 text-lg text-green-700">Durée totale: {formatTime(interviewTime)}</p>
-              <p className="text-green-600">Merci pour votre participation.</p>
+            <div className="bg-green-50 rounded-lg p-6 text-center mb-6">
+              <CheckCircle className="w-12 h-12 mx-auto text-green-500 mb-4" />
+              <h2 className="text-xl font-semibold mb-2">Entretien terminé !</h2>
+              <p className="mb-2">Durée totale: {formatTime(interviewTime)}</p>
+              <p className="text-gray-700">Merci pour votre participation.</p>
             </div>
           )}
 
-          <div className="flex justify-center mb-10">
+          <div className="flex justify-center mb-8">
             <button
               onClick={startListening}
               disabled={isListening || interviewPhase === 2}
               className={`
-                flex items-center justify-center gap-3 
-                px-8 py-4 rounded-full text-white font-semibold text-lg
-                transition-all duration-300 transform hover:scale-105
-                shadow-lg hover:shadow-xl
+                flex items-center justify-center gap-2 
+                px-6 py-3 rounded-full text-white font-medium
+                transition-all duration-200 transform hover:scale-105
                 ${isListening 
-                  ? 'bg-gradient-to-r from-red-500 to-red-600 animate-pulse' 
-                  : 'bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700'
+                  ? 'bg-red-500 animate-pulse' 
+                  : 'bg-blue-600 hover:bg-blue-700'
                 }
                 disabled:opacity-50 disabled:cursor-not-allowed
               `}
             >
               {isListening ? (
                 <>
-                  <MicOff className="w-6 h-6" />
+                  <MicOff className="w-5 h-5" />
                   <span>En écoute...</span>
                 </>
               ) : (
                 <>
-                  <Mic className="w-6 h-6" />
+                  <Mic className="w-5 h-5" />
                   <span>{interviewPhase === 0 ? "Commencer l'entretien" : "Répondre"}</span>
                 </>
               )}
@@ -201,48 +207,48 @@ function InterviewSimulator() {
 
           <div className="space-y-6">
             {interviewPhase > 0 && (
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 shadow-inner">
-                <div className="flex items-center gap-3 text-blue-700 mb-3">
-                  <NotebookText className="w-5 h-5" />
-                  <span className="font-semibold">Question actuelle :</span>
+              <div className="bg-blue-50 rounded-lg p-4">
+                <div className="flex items-center gap-2 text-blue-600 mb-2">
+                  <NotebookText className="w-4 h-4" />
+                  <span className="font-medium">Question actuelle :</span>
                 </div>
-                <p className="text-gray-800 text-lg font-medium pl-8">{questions[currentQuestionIndex]}</p>
+                <p className="text-gray-800 font-medium">{questions[currentQuestionIndex]}</p>
               </div>
             )}
 
             {message && (
-              <div className="bg-white rounded-2xl p-6 shadow-md border border-gray-100">
-                <div className="flex items-center gap-3 text-gray-700 mb-3">
-                  <MessageSquare className="w-5 h-5" />
-                  <span className="font-semibold">Votre réponse :</span>
+              <div className="bg-gray-50 rounded-lg p-4">
+                <div className="flex items-center gap-2 text-gray-600 mb-2">
+                  <MessageSquare className="w-4 h-4" />
+                  <span className="font-medium">Votre réponse :</span>
                 </div>
-                <p className="text-gray-800 pl-8">{message}</p>
+                <p className="text-gray-800">{message}</p>
               </div>
             )}
 
             {feedback && (
-              <div className="bg-gradient-to-r from-yellow-50 to-amber-50 rounded-2xl p-6 shadow-inner">
-                <div className="flex items-center gap-3 text-yellow-700 mb-3">
-                  <CheckCircle className="w-5 h-5" />
-                  <span className="font-semibold">Feedback :</span>
+              <div className="bg-yellow-50 rounded-lg p-4">
+                <div className="flex items-center gap-2 text-yellow-600 mb-2">
+                  <CheckCircle className="w-4 h-4" />
+                  <span className="font-medium">Feedback :</span>
                 </div>
-                <p className="text-gray-800 pl-8">{feedback}</p>
+                <p className="text-gray-800">{feedback}</p>
               </div>
             )}
 
             {(isLoading || reply) && (
-              <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl p-6 shadow-inner">
-                <div className="flex items-center gap-3 text-purple-700 mb-3">
-                  <Volume2 className="w-5 h-5" />
-                  <span className="font-semibold">{interviewPhase === 2 ? "Conclusion" : "Suite"} :</span>
+              <div className="bg-blue-50 rounded-lg p-4">
+                <div className="flex items-center gap-2 text-blue-600 mb-2">
+                  <Volume2 className="w-4 h-4" />
+                  <span className="font-medium">{interviewPhase === 2 ? "Conclusion" : "Suite"}:</span>
                 </div>
                 {isLoading ? (
-                  <div className="flex items-center gap-3 text-gray-600 pl-8">
-                    <Loader2 className="w-6 h-6 animate-spin" />
-                    <span className="font-medium">Analyse en cours...</span>
+                  <div className="flex items-center gap-2 text-gray-600">
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    <span>Analyse en cours...</span>
                   </div>
                 ) : (
-                  <p className="text-gray-800 pl-8">{reply}</p>
+                  <p className="text-gray-800">{reply}</p>
                 )}
               </div>
             )}

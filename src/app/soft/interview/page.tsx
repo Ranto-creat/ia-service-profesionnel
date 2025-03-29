@@ -1,24 +1,27 @@
 'use client';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+//import { Button } from '@/components/ui/button';
+//import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { Textarea } from '@/components/ui/textarea';
-import { useState } from 'react';
-import { GalleryHorizontal, Mic, MicOff, Video, Volume2 } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Slider } from '@/components/ui/slider';
+//import { Textarea } from '@/components/ui/textarea';
+//import { useState } from 'react';
+//import { GalleryHorizontal, Mic, MicOff, Video, Volume2 } from 'lucide-react';
+//import { cn } from '@/lib/utils';
+//import { Slider } from '@/components/ui/slider';
+import   FaceLandmarksDetection  from "@/components/FaceLandMark";
+import VoiceChat from "../../../components/voiceChat";
 
-type SliderProps = React.ComponentProps<typeof Slider>;
+
+//type SliderProps = React.ComponentProps<typeof Slider>;
 
 export default function Simulation() {
-    const [messages, setMessages] = useState([
+   /* const [messages, setMessages] = useState([
         { sender: 'bot', text: 'Bonjour, pouvez-vous vous présenter ?' },
         {
             sender: 'user',
             text: "Oui, je m'appelle Alex et je suis développeur.",
         },
-    ]);
+    ]);*/
 
     return (
         <div className="flex min-h-screen">
@@ -31,7 +34,8 @@ export default function Simulation() {
 
                 <div className="gap-4 md:grid grid-cols-3 grid-rows-2">
                     <Card className="col-span-2 p-4 border-slate-700 shadow-xl bg-transparent">
-                        <div className="aspect-video bg-gray-200 rounded mb-4 flex items-center justify-center">
+                        <FaceLandmarksDetection />
+                        {/*<div className="aspect-video bg-gray-200 rounded mb-4 flex items-center justify-center">
                             🎥 Webcam Active (Mock)
                         </div>
                         <div className="flex justify-between py-6">
@@ -49,7 +53,6 @@ export default function Simulation() {
                                 <Button
                                     variant="ghost"
                                     className="border-1 border-slate-700 shadow-xl cursor-pointer">
-                                    {/* toogle mic off / mic on */}
                                     <MicOff size={40} />
                                 </Button>
                                 <Button
@@ -67,6 +70,7 @@ export default function Simulation() {
                                 CC
                             </Button>
                         </div>
+                        */}
                     </Card>
 
                     <Tabs defaultValue="messages" className="col-span-1 mt-16 ">
@@ -86,7 +90,9 @@ export default function Simulation() {
                         <TabsContent
                             value="messages"
                             className="p-2 h-[350px] overflow-y-auto space-y-2">
-                            {messages.map((msg, idx) => (
+                                <VoiceChat />
+                            {/* 
+                                {messages.map((msg, idx) => (
                                 <Card
                                     key={idx}
                                     className="p-2 text-sm border-slate-700 shadow-xl bg-transparent">
@@ -103,6 +109,7 @@ export default function Simulation() {
                                 />
                                 <Button>Envoyer</Button>
                             </div>
+                            */}
                         </TabsContent>
                         <TabsContent value="participants" className="p-4">
                             1 participant (vous)

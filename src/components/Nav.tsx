@@ -4,11 +4,9 @@ import React, { MouseEventHandler, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import {
-    DollarSign,
-    ArrowLeftRight,
+   
     LogOut,
-    MessagesSquare,
-    TrendingUp,
+ 
     Plus,
     Home,
     Heart,
@@ -65,6 +63,7 @@ function NavItem({ Icon, link }: INavItem) {
     const pathname = usePathname();
 
     useEffect(() => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         pathname.endsWith(link) ? setIsVisited(true) : setIsVisited(false);
     }, [link, pathname]);
 

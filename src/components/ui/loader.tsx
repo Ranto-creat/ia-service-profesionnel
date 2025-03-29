@@ -10,13 +10,13 @@ export function AILoader({
     message?: string;
 }) {
     const [rotation, setRotation] = useState(0);
-    const requestRef = useRef<number>();
+    const requestRef = useRef<number>(0);
     const particlesRef = useRef<HTMLDivElement>(null);
     const [dots, setDots] = useState('');
 
     // Animation fluide avec requestAnimationFrame
     useEffect(() => {
-        const animate = (time: number) => {
+        const animate = () => {
             setRotation((prev) => (prev + 0.5) % 360);
             requestRef.current = requestAnimationFrame(animate);
         };
@@ -49,7 +49,7 @@ export function AILoader({
             particle.style.transform = 'translate(-50%, -50%)';
 
             const angle = (i / 12) * Math.PI * 2;
-            const animation = particle.animate(
+             particle.animate(
                 [
                     {
                         transform: `translate(-50%, -50%) translate(0px, 0px)`,
