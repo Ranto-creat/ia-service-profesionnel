@@ -39,20 +39,21 @@ export default function Home() {
                     <motion.h1
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="text-4xl sm:text-5xl md:text-6xl font-bold text-white text-center bg-clip-text bg-gradient-to-r from-white to-white/50">
-                        Welcome to Mentor AI
+                        className="text-2xl sm:text-5xl md:text-6xl font-bold text-white text-center bg-clip-text bg-gradient-to-r from-white to-white/50">
+                        Bienvenue sur Mentor AI!
                     </motion.h1>
 
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.2 }}
-                        className="text-lg sm:text-xl text-white/80 text-center mb-8">
-                        How can I help you today?
-                    </motion.div>
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 }}
+                        className="text-lg sm:text-xl text-white/80 text-center">
+                        Votre assistant personnel pour vous accompagner dans
+                        votre formation professionnel
+                    </motion.p>
 
                     {/* Cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl">
+                    <motion.div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl">
                         {/* Hard Skills */}
                         <Link href="/hard">
                             <Card className="group h-full cursor-pointer p-6 bg-white/5 hover:bg-white/10 border-white/10 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/20">
@@ -61,11 +62,11 @@ export default function Home() {
                                         <Brain className="w-8 h-8 text-purple-400" />
                                     </div>
                                     <h2 className="text-xl font-semibold text-white">
-                                        Find Trainings
+                                        Trouver une formation
                                     </h2>
                                     <p className="text-white/60">
-                                        Discover personalized learning paths and
-                                        expert-curated content
+                                        Explorez les meilleures formations
+                                        adaptées à vos besoins
                                     </p>
                                 </div>
                             </Card>
@@ -79,11 +80,11 @@ export default function Home() {
                                         <MessageSquare className="w-8 h-8 text-yellow-400" />
                                     </div>
                                     <h2 className="text-xl font-semibold text-white">
-                                        Simulate an Interview
+                                        Simuler un entretien
                                     </h2>
                                     <p className="text-white/60">
-                                        Practice with AI-powered mock interviews
-                                        and get instant feedback
+                                        Pratiquez avec notre IA pour briller en
+                                        entretien.
                                     </p>
                                 </div>
                             </Card>
@@ -97,24 +98,24 @@ export default function Home() {
                                         <Sparkles className="w-8 h-8 text-pink-400" />
                                     </div>
                                     <h2 className="text-xl font-semibold text-white">
-                                        Ask Anything
+                                        Posez vos questions
                                     </h2>
                                     <p className="text-white/60">
-                                        Get instant answers to your questions
-                                        and expert guidance
+                                        Discutez avec notre IA pour des conseils
+                                        personnalisés
                                     </p>
                                 </div>
                             </Card>
                         </Link>
-                    </div>
+                    </motion.div>
                 </div>
 
                 {/* Chat input */}
                 <div className="w-full max-w-4xl mx-auto px-4 mb-8">
                     <div className="relative">
                         <Textarea
-                            placeholder="Ask me anything..."
-                            className="min-h-[60px] bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-white/20 focus:ring-white/20"
+                            placeholder="Posez votre question ici..."
+                            className="min-h-[60px] bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-white/20 focus:ring-white/20 placeholder:text-lg"
                         />
                         <div className="absolute bottom-3 right-3 flex items-center gap-3">
                             <Button
