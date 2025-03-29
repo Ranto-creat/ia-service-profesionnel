@@ -24,7 +24,30 @@ export default function ChatPage() {
     const [input, setInput] = useState('');
     const bottomRef = useRef<HTMLDivElement | null>(null);
 
-    const handleSend = () => {
+    const fetchGeminiResponse = async (userMessage: string) => {
+        const apiKey = 'AIzaSyCh2TED1wI00MMK5vmn5e4khNFXuO2kaPU';
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: userMessage }] }],
+                }),
+            });
+
+            const data = await response.json();
+            return (
+                data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+                "Je n'ai pas pu obtenir de réponse."
+            );
+        } catch (error) {
+            return "Erreur lors de la communication avec l'API." + error;
+        }
+    };
+
+    const handleSend = async () => {
         if (!input.trim()) return;
 
         const newMessages: Message[] = [
@@ -34,15 +57,9 @@ export default function ChatPage() {
         setMessages(newMessages);
         setInput('');
 
-        setTimeout(() => {
-            setMessages([
-                ...newMessages,
-                {
-                    role: 'ai',
-                    content: 'Merci pour ta question ! Je travaille dessus 🔍',
-                },
-            ]);
-        }, 1000);
+        const aiResponse = await fetchGeminiResponse(input);
+
+        setMessages([...newMessages, { role: 'ai', content: aiResponse }]);
     };
 
     useEffect(() => {
@@ -103,7 +120,6 @@ export default function ChatPage() {
             <footer className="w-full px-4 sm:px-6 lg:px-8 mb-22 md:mb-8">
                 <div className="max-w-4xl mx-auto">
                     <div className="relative w-full">
-                        {/* Input champ de texte */}
                         <Input
                             placeholder="Ask me anything..."
                             className="w-full min-h-[60px] bg-white/5 border border-white/10 text-white placeholder:text-white/50 px-4 py-3 pr-28 backdrop-blur-md focus:border-white/20 focus:ring-white/20"
@@ -111,8 +127,6 @@ export default function ChatPage() {
                             onChange={(e) => setInput(e.target.value)}
                             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                         />
-
-                        {/* Boutons à droite dans l'input */}
                         <div className="absolute inset-y-0 right-2 flex items-center gap-2">
                             <Button
                                 variant="ghost"

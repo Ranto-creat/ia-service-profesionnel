@@ -2,7 +2,7 @@
 //import { Button } from '@/components/ui/button';
 //import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+//import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 //import { Textarea } from '@/components/ui/textarea';
 //import { useState } from 'react';
 //import { GalleryHorizontal, Mic, MicOff, Video, Volume2 } from 'lucide-react';
@@ -72,51 +72,12 @@ export default function Simulation() {
                         </div>
                         */}
                     </Card>
-
-                    <Tabs defaultValue="messages" className="col-span-1 mt-16 ">
-                        <TabsList className="grid grid-cols-2 bg-purple-800">
-                            <TabsTrigger
-                                value="messages"
-                                className="cursor-pointer">
-                                Messages
-                            </TabsTrigger>
-                            <TabsTrigger
-                                value="participants"
-                                className="cursor-pointer">
-                                Participants
-                            </TabsTrigger>
-                        </TabsList>
-
-                        <TabsContent
-                            value="messages"
-                            className="p-2 h-[350px] overflow-y-auto space-y-2">
-                                <VoiceChat />
-                            {/* 
-                                {messages.map((msg, idx) => (
-                                <Card
-                                    key={idx}
-                                    className="p-2 text-sm border-slate-700 shadow-xl bg-transparent">
-                                    <strong>
-                                        {msg.sender === 'bot' ? 'IA' : 'Moi'}:
-                                    </strong>{' '}
-                                    {msg.text}
-                                </Card>
-                            ))}
-                            <div className="flex items-end gap-2 mt-4">
-                                <Textarea
-                                    placeholder="Votre réponse..."
-                                    className="placeholder:bg-transparent"
-                                />
-                                <Button>Envoyer</Button>
-                            </div>
-                            */}
-                        </TabsContent>
-                        <TabsContent value="participants" className="p-4">
-                            1 participant (vous)
-                        </TabsContent>
-                    </Tabs>
+                     <VoiceChat />    
+                   {/* 
+                   */}
                 </div>
             </div>
         </div>
     );
 }
+
