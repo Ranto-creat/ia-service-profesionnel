@@ -141,19 +141,19 @@ function InterviewSimulator() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 p-6">
+    <div className="min-h-screen bg-gradient-to-b from-[#1b242e] to-[#283341] p-6  border-[#7a91ae] rounded-2xl">
       <div className="max-w-2xl mx-auto">
-        <div className="bg-white rounded-2xl shadow-xl p-8">
-          <h1 className="text-3xl font-bold text-center mb-4 text-blue-800">
+        <div className="bg-[#1b242e] rounded-2xl shadow-xl p-8">
+          <h1 className="text-3xl font-bold text-center mb-4 text-white">
             Simulateur d&lsquo;Entretien
           </h1>
           
           <div className="flex justify-between items-center mb-6">
-            <div className="flex items-center gap-2 text-blue-600">
+            <div className="flex items-center gap-2 text-white">
               <Clock className="w-5 h-5" />
               <span>Temps: {formatTime(interviewTime)}</span>
             </div>
-            <div className="flex items-center gap-2 text-blue-600">
+            <div className="flex items-center gap-2 text-white">
               <NotebookText className="w-5 h-5" />
               <span>Question {currentQuestionIndex + 1}/{questions.length}</span>
             </div>

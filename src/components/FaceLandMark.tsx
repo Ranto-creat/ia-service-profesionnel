@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useEffect, useRef, useState } from "react";
 import { useAnimationFrame } from "../lib/hooks/useAnimationFrame";
 import "@tensorflow/tfjs-backend-webgl";
@@ -6,7 +6,7 @@ import * as tfjsWasm from "@tensorflow/tfjs-backend-wasm";
 import { drawFaces } from "../lib/utils";
 import * as faceLandmarksDetection from "@tensorflow-models/face-landmarks-detection";
 import * as faceMesh from "@mediapipe/face_mesh";
-import {detectExpression} from "./FaceExpression"
+import { detectExpression } from "./FaceExpression";
 
 tfjsWasm.setWasmPaths("https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-wasm");
 
@@ -22,16 +22,13 @@ async function setupDetector(): Promise<faceLandmarksDetection.FaceLandmarksDete
 }
 
 // 🟢 Fonction pour configurer la vidéo
-async function setupVideo(setLogs: (log: string) => void): Promise<HTMLVideoElement> {
-    setLogs("🔄 Demande d'accès à la caméra...");
-    
+async function setupVideo(): Promise<HTMLVideoElement> {
     const video = document.createElement("video");
     video.setAttribute("id", "video");
     video.setAttribute("playsInline", "true");
 
     const stream = await navigator.mediaDevices.getUserMedia({ video: true });
 
-    setLogs("✅ Caméra activée !");
     video.srcObject = stream;
 
     await new Promise<void>((resolve) => {
@@ -39,21 +36,18 @@ async function setupVideo(setLogs: (log: string) => void): Promise<HTMLVideoElem
     });
 
     video.play();
-    setLogs(`🎥 Vidéo prête (width: ${video.videoWidth}, height: ${video.videoHeight})`);
-    
+
     return video;
 }
 
 // 🟢 Fonction pour configurer le canvas
-async function setupCanvas(video: HTMLVideoElement, setLogs: (log: string) => void): Promise<CanvasRenderingContext2D> {
-    setLogs("🎨 Configuration du canvas...");
+async function setupCanvas(video: HTMLVideoElement): Promise<CanvasRenderingContext2D> {
     const canvas = document.getElementById("canvas") as HTMLCanvasElement;
     const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
 
-    setLogs("✅ Canvas prêt !");
     return ctx;
 }
 
@@ -62,7 +56,8 @@ export default function FaceLandmarksDetection() {
     const detectorRef = useRef<faceLandmarksDetection.FaceLandmarksDetector | null>(null);
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
-    const [logs, setLogs] = useState<string[]>([]);
+    const expressionCountRef = useRef<{ [expression: string]: number }>({});
+    const [feedback, setFeedback] = useState<string | null>(null);
 
     const contours = faceLandmarksDetection.util.getKeypointIndexByContour(
         faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh
@@ -71,19 +66,24 @@ export default function FaceLandmarksDetection() {
     useEffect(() => {
         async function initialize() {
             try {
-                setLogs(["🚀 Initialisation en cours..."]);
-
-                const video = await setupVideo((msg) => setLogs((prev) => [...prev, msg]));
-                document.body.appendChild(video); // Ajout au DOM
+                const video = await setupVideo();
+                document.body.appendChild(video);
                 videoRef.current = video;
 
-                const context = await setupCanvas(video, (msg) => setLogs((prev) => [...prev, msg]));
+                const context = await setupCanvas(video);
                 setCtx(context);
 
                 detectorRef.current = await setupDetector();
-                setLogs((prev) => [...prev, "✅ Détecteur de visages prêt !"]);
+
+                // Déclenche un feedback après 10 secondes
+                setTimeout(() => {
+                    const mostFrequentExpression = Object.entries(expressionCountRef.current)
+                        .sort((a, b) => b[1] - a[1])[0]?.[0] || "Aucune expression détectée";
+
+                    setFeedback(`Expression la plus détectée : ${mostFrequentExpression}`);
+                }, 10000);
             } catch (error) {
-                setLogs((prev) => [...prev, `❌ Erreur: ${error instanceof Error ? error.message : "Erreur inconnue"}`]);
+                console.error("Erreur :", error);
             }
         }
 
@@ -98,7 +98,12 @@ export default function FaceLandmarksDetection() {
         ctx.clearRect(0, 0, videoRef.current.videoWidth, videoRef.current.videoHeight);
         ctx.drawImage(videoRef.current, 0, 0, videoRef.current.videoWidth, videoRef.current.videoHeight);
         drawFaces(faces, ctx, contours);
-         detectExpression(faces, (msg) => setLogs((prev) => [...prev, msg]))
+
+        detectExpression(faces, (expression) => {
+            if (expression) {
+                expressionCountRef.current[expression] = (expressionCountRef.current[expression] || 0) + 1;
+            }
+        });
     }, !!(detectorRef.current && videoRef.current && ctx));
 
     return (
@@ -113,22 +118,24 @@ export default function FaceLandmarksDetection() {
                 }}
                 id="canvas"
             />
-            {/* 🔹 Section affichage des logs */}
-            <pre
-                style={{
-                    marginTop: "1rem",
-                    background: "#222",
-                    color: "#0f0",
-                    padding: "10px",
-                    borderRadius: "5px",
-                    maxWidth: "85vw",
-                    overflow: "auto",
-                    fontSize: "0.9rem",
-                    textAlign: "left",
-                }}
-            >
-                {logs.join("\n")}
-            </pre>
+            {/* 🔹 Affichage du feedback */}
+            {feedback && (
+                <div
+                    style={{
+                        marginTop: "1rem",
+                        background: "#222",
+                        color: "#fff",
+                        padding: "10px",
+                        borderRadius: "5px",
+                        maxWidth: "85vw",
+                        fontSize: "1rem",
+                        fontWeight: "bold",
+                    }}
+                >
+                    {feedback}
+                </div>
+            )}
         </div>
     );
 }
+
