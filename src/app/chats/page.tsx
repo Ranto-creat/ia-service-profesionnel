@@ -73,7 +73,7 @@ export default function ChatPage() {
             </header>
 
             {/* Chat content */}
-            <main className="flex-1 px-4 sm:px-6 lg:px-8 z-10 w-full max-w-4xl mx-auto">
+            <main className="flex-1 px-4 sm:px-6 lg:px-8 w-full max-w-4xl mx-auto">
                 <Card className="bg-white/5 p-4 h-full overflow-hidden shadow-lg border-white/10">
                     <ScrollArea className="h-[65vh] pr-4">
                         {messages.map((msg, index) => (
@@ -100,7 +100,7 @@ export default function ChatPage() {
             </main>
 
             {/* Footer input (identique à la page d’accueil) */}
-            <footer className="w-full px-4 sm:px-6 lg:px-8 z-20 mb-8">
+            <footer className="w-full px-4 sm:px-6 lg:px-8 mb-22 md:mb-8">
                 <div className="max-w-4xl mx-auto">
                     <div className="relative w-full">
                         {/* Input champ de texte */}

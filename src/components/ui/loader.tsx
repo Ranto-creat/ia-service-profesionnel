@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 
 export function AILoader({
-    message = "Analyse en cours par l'IA...",
+    message = 'Analyse en cours ...',
 }: {
     message?: string;
 }) {
@@ -49,7 +49,7 @@ export function AILoader({
             particle.style.transform = 'translate(-50%, -50%)';
 
             const angle = (i / 12) * Math.PI * 2;
-             particle.animate(
+            particle.animate(
                 [
                     {
                         transform: `translate(-50%, -50%) translate(0px, 0px)`,

@@ -69,10 +69,10 @@ function NavItem({ Icon, link }: INavItem) {
     return (
         <Link
             href={link}
-            className={`flex cursor-pointer items-center gap-4 border-l-4 p-4 text-sm text-white  hover:text-purple-400 ${
+            className={`flex cursor-pointer items-center gap-4 border-l-4 p-4 text-sm text-neutral-500  md:text-white  hover:text-purple-400 ${
                 isVisited
-                    ? 'border-neutral-800 dark:text-purple-400'
-                    : 'border-transparent'
+                    ? 'md:border-neutral-800 text-purple-400'
+                    : 'md:border-transparent'
             }`}>
             {Icon}
         </Link>
@@ -111,7 +111,7 @@ const MobileNavigation = () => {
         <>
             <div
                 className={`cursor-pointer overflow-hidden rounded bg-neutral-100 transition-all duration-200 ease-in ${
-                    isOpen ? 'h-14' : 'h-0'
+                    isOpen ? 'h-12' : 'h-0'
                 }`}
                 onClick={menuCloseClickHandler}>
                 <div className="flex justify-center space-x-4 font-bold text-neutral-700">
@@ -131,14 +131,7 @@ const MobileNavigation = () => {
             </div>
 
             <div
-                className="flex w-full items-center justify-between rounded bg-neutral-200 p-2"
-                onClick={menuOpenClickHandler}>
-                <h1 className="text-sm font-bold text-neutral-700">Menu</h1>
-                <Plus className={`${isOpen && 'rotate-45'} text-neutral-700`} />
-            </div>
-
-            <div
-                className="flex items-center justify-between rounded-xl bg-slate-900/95 p-4 backdrop-blur-lg"
+                className="flex items-center justify-between rounded-xl bg-slate-900/95 p-4 backdrop-blur-lg cursor-pointer"
                 onClick={menuOpenClickHandler}>
                 <h1 className="font-medium text-white">Menu</h1>
                 <Plus
