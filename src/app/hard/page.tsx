@@ -1,11 +1,10 @@
 'use client';
 
 import {  useState } from 'react';
-import { Search,  MapPin, BookOpen} from 'lucide-react';
+import { Search,  MapPin} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { CourseCard } from '@/components/CardComponent';
-import Link from 'next/link';
 
 interface Course {
     id: string;
