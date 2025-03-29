@@ -6,63 +6,26 @@ import * as tfjsWasm from "@tensorflow/tfjs-backend-wasm";
 import { drawFaces } from "../lib/utils";
 import * as faceLandmarksDetection from "@tensorflow-models/face-landmarks-detection";
 import * as faceMesh from "@mediapipe/face_mesh";
-import {detectExpression} from "./FaceExpression"
+import { detectExpression } from "./FaceExpression";
 
 tfjsWasm.setWasmPaths("https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-wasm");
 
-// 🟢 Fonction pour configurer le détecteur de visages
-async function setupDetector(): Promise<faceLandmarksDetection.FaceLandmarksDetector> {
-    const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
-    return faceLandmarksDetection.createDetector(model, {
-        runtime: "mediapipe",
-        solutionPath: `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@${faceMesh.VERSION}`,
-        maxFaces: 2,
-        refineLandmarks: true,
-    });
-}
+// 🟢 Définition du type de statistiques
+type Stats = {
+    smile: number;
+    neutral: number;
+    lookAway: number;
+    total: number;
+};
 
-// 🟢 Fonction pour configurer la vidéo
-async function setupVideo(setLogs: (log: string) => void): Promise<HTMLVideoElement> {
-    setLogs("🔄 Demande d'accès à la caméra...");
-    
-    const video = document.createElement("video");
-    video.setAttribute("id", "video");
-    video.setAttribute("playsInline", "true");
-
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-
-    setLogs("✅ Caméra activée !");
-    video.srcObject = stream;
-
-    await new Promise<void>((resolve) => {
-        video.onloadedmetadata = () => resolve();
-    });
-
-    video.play();
-    setLogs(`🎥 Vidéo prête (width: ${video.videoWidth}, height: ${video.videoHeight})`);
-    
-    return video;
-}
-
-// 🟢 Fonction pour configurer le canvas
-async function setupCanvas(video: HTMLVideoElement, setLogs: (log: string) => void): Promise<CanvasRenderingContext2D> {
-    setLogs("🎨 Configuration du canvas...");
-    const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-    const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
-
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-
-    setLogs("✅ Canvas prêt !");
-    return ctx;
-}
-
-// 🔵 Composant principal
 export default function FaceLandmarksDetection() {
     const detectorRef = useRef<faceLandmarksDetection.FaceLandmarksDetector | null>(null);
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
     const [logs, setLogs] = useState<string[]>([]);
+    
+    // 🟢 État pour stocker les statistiques
+    const [stats, setStats] = useState<Stats>({ smile: 0, neutral: 0, lookAway: 0, total: 0 });
 
     const contours = faceLandmarksDetection.util.getKeypointIndexByContour(
         faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh
@@ -73,14 +36,33 @@ export default function FaceLandmarksDetection() {
             try {
                 setLogs(["🚀 Initialisation en cours..."]);
 
-                const video = await setupVideo((msg) => setLogs((prev) => [...prev, msg]));
+                const video = document.createElement("video");
+                video.setAttribute("playsInline", "true");
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+
+                video.srcObject = stream;
+                await new Promise<void>((resolve) => (video.onloadedmetadata = () => resolve()));
+                video.play();
+
                 document.body.appendChild(video); // Ajout au DOM
                 videoRef.current = video;
 
-                const context = await setupCanvas(video, (msg) => setLogs((prev) => [...prev, msg]));
-                setCtx(context);
+                const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+                const context = canvas.getContext("2d") as CanvasRenderingContext2D;
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
 
-                detectorRef.current = await setupDetector();
+                setCtx(context);
+                detectorRef.current = await faceLandmarksDetection.createDetector(
+                    faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh,
+                    {
+                        runtime: "mediapipe",
+                        solutionPath: `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@${faceMesh.VERSION}`,
+                        maxFaces: 2,
+                        refineLandmarks: true,
+                    }
+                );
+
                 setLogs((prev) => [...prev, "✅ Détecteur de visages prêt !"]);
             } catch (error) {
                 setLogs((prev) => [...prev, `❌ Erreur: ${error instanceof Error ? error.message : "Erreur inconnue"}`]);
@@ -98,8 +80,29 @@ export default function FaceLandmarksDetection() {
         ctx.clearRect(0, 0, videoRef.current.videoWidth, videoRef.current.videoHeight);
         ctx.drawImage(videoRef.current, 0, 0, videoRef.current.videoWidth, videoRef.current.videoHeight);
         drawFaces(faces, ctx, contours);
-         detectExpression(faces, (msg) => setLogs((prev) => [...prev, msg]))
+
+        // 🟢 Détection des expressions et mise à jour des statistiques
+        detectExpression(faces, (msg) => {
+            setLogs((prev) => [...prev, msg]);
+
+            setStats((prev) => {
+                let smile = prev.smile;
+                let neutral = prev.neutral;
+                let lookAway = prev.lookAway;
+
+                if (msg.includes("😁")) smile++;
+                else if (msg.includes("😐")) neutral++;
+                else if (msg.includes("👀")) lookAway++;
+
+                return { smile, neutral, lookAway, total: prev.total + 1 };
+            });
+        });
     }, !!(detectorRef.current && videoRef.current && ctx));
+
+    // 🟢 Calcul des pourcentages
+    const smilePercent = stats.total ? ((stats.smile / stats.total) * 100).toFixed(1) : "0";
+    const neutralPercent = stats.total ? ((stats.neutral / stats.total) * 100).toFixed(1) : "0";
+    const lookAwayPercent = stats.total ? ((stats.lookAway / stats.total) * 100).toFixed(1) : "0";
 
     return (
         <div style={{ textAlign: "center" }}>
@@ -113,22 +116,27 @@ export default function FaceLandmarksDetection() {
                 }}
                 id="canvas"
             />
+            
             {/* 🔹 Section affichage des logs */}
-            <pre
+           
+
+            {/* 🔹 Affichage des statistiques en pourcentage */}
+            <div
                 style={{
                     marginTop: "1rem",
-                    background: "#222",
-                    color: "#0f0",
+                    background: "#333",
+                    color: "#fff",
                     padding: "10px",
                     borderRadius: "5px",
                     maxWidth: "85vw",
-                    overflow: "auto",
-                    fontSize: "0.9rem",
-                    textAlign: "left",
+                    fontSize: "1rem",
                 }}
             >
-                {logs.join("\n")}
-            </pre>
+                <p>📊 Statistiques :</p>
+                <p>😁 Sourire : {smilePercent}%</p>
+                <p>😐 Neutre : {neutralPercent}%</p>
+                <p>👀 Regard détourné : {lookAwayPercent}%</p>
+            </div>
         </div>
     );
 }
